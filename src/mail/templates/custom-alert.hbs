@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }}</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px 20px;
+      text-align: center;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+    }
+    .alert-type {
+      background-color: rgba(255, 255, 255, 0.2);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 10px;
+      display: inline-block;
+    }
+    .content {
+      padding: 30px 20px;
+    }
+    .greeting {
+      font-size: 16px;
+      margin-bottom: 20px;
+      color: #555;
+    }
+    .message {
+      background-color: #f8f9fa;
+      border-left: 4px solid #667eea;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 0 4px 4px 0;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    .actions {
+      margin: 30px 0;
+      text-align: center;
+    }
+    .action-button {
+      display: inline-block;
+      padding: 12px 24px;
+      margin: 5px 10px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+    }
+    .action-button.primary {
+      background-color: #667eea;
+      color: white;
+    }
+    .action-button.secondary {
+      background-color: #6c757d;
+      color: white;
+    }
+    .action-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .metadata {
+      background-color: #f1f3f4;
+      padding: 15px;
+      border-radius: 4px;
+      margin: 20px 0;
+      font-size: 14px;
+    }
+    .metadata-item {
+      margin: 5px 0;
+    }
+    .metadata-label {
+      font-weight: 600;
+      color: #555;
+    }
+    .footer {
+      background-color: #f8f9fa;
+      padding: 20px;
+      text-align: center;
+      border-top: 1px solid #e9ecef;
+      font-size: 12px;
+      color: #6c757d;
+    }
+    .footer a {
+      color: #667eea;
+      text-decoration: none;
+    }
+    .priority-indicator {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+    .priority-high { background-color: #dc3545; }
+    .priority-medium { background-color: #ffc107; }
+    .priority-low { background-color: #28a745; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>{{ title }}</h1>
+      <div class="alert-type">
+        <span class="priority-indicator priority-{{ metadata.priority | lower }}"></span>
+        {{ alertType | replace('_', ' ') | title }} Alert
+      </div>
+    </div>
+    
+    <div class="content">
+      <div class="greeting">
+        Hello {{ recipientName }},
+      </div>
+      
+      <div class="message">
+        {{ message }}
+      </div>
+      
+      {% if metadata %}
+      <div class="metadata">
+        <h4 style="margin-top: 0; color: #333;">Alert Details:</h4>
+        {% for key, value in metadata %}
+        <div class="metadata-item">
+          <span class="metadata-label">{{ key | replace('_', ' ') | title }}:</span> {{ value }}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      
+      {% if actions and actions.length > 0 %}
+      <div class="actions">
+        <h4 style="color: #333; margin-bottom: 15px;">Quick Actions:</h4>
+        {% for action in actions %}
+        <a href="{{ action.url }}" class="action-button {{ action.type }}">
+          {{ action.label }}
+        </a>
+        {% endfor %}
+      </div>
+      {% endif %}
+      
+      <p style="margin-top: 30px; color: #666; font-size: 14px;">
+        If you have any questions or concerns, please don't hesitate to contact our support team.
+      </p>
+    </div>
+    
+    <div class="footer">
+      <p>
+        This is an automated message from Property Management System.<br>
+        <a href="{{ process.env.FRONTEND_URL }}">Visit Dashboard</a> | 
+        <a href="{{ process.env.FRONTEND_URL }}/support">Contact Support</a>
+      </p>
+      <p style="margin-top: 10px; color: #999;">
+        © {{ new Date().getFullYear() }} Property Management System. All rights reserved.
+      </p>
+    </div>
+  </div>
+</body>
+</html>

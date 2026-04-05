@@ -13,7 +13,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { LoginAuthDto } from './dto/login.dto';
 import { CreateAuthDto } from './dto/create-auth.dto';
-import { Users, UserRole } from '../users/entities/user.entity';
+import { User, UserRole } from '../users/entities/user.entity';
 import { MailService } from '../mail/mail.service';
 import * as speakeasy from 'speakeasy';
 import { UsersService } from '../users/users.service';
@@ -23,8 +23,8 @@ export class AuthService {
   private readonly logger = new Logger(AuthService.name);
 
   constructor(
-    @InjectRepository(Users)
-    private readonly userRepository: Repository<Users>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly mailService: MailService,
@@ -163,7 +163,7 @@ export class AuthService {
           role: user.role,
         },
       };
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error(`Sign in error: ${error.message}`);
       throw error;
     }
@@ -184,7 +184,7 @@ export class AuthService {
       }
       await this.mailService.sendWelcomeEmail(user);
       this.logger.log(`Welcome email sent to ${email}`);
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error(`Failed to send welcome email: ${error.message}`);
       throw error;
     }
@@ -231,7 +231,7 @@ export class AuthService {
         refreshToken: tokens.refreshToken,
         role: user.role,
       };
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error(`Token refresh failed: ${error.message}`);
       throw new UnauthorizedException('Unable to refresh tokens');
     }
@@ -244,7 +244,7 @@ export class AuthService {
         secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
       });
       return payload;
-    } catch (error) {
+    } catch (error: any) {
       this.logger.warn(`Token validation failed: ${error.message}`);
       throw new UnauthorizedException('Invalid token');
     }
@@ -267,7 +267,7 @@ export class AuthService {
       this.logger.log(`User signed out successfully: ID ${userId}`);
 
       return { message: 'Successfully signed out' };
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error(`Sign out error: ${error.message}`);
       throw error;
     }
@@ -361,7 +361,7 @@ export class AuthService {
       this.logger.log(`Password reset email sent to ${email}`);
 
       return { message: 'Password reset email sent successfully' };
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error(
         `Failed to send password reset email: ${error.message}`,
       );
@@ -422,15 +422,15 @@ export class AuthService {
       // Update password and clear OTP data
       await this.userRepository.update(user.id, {
         password: hashedPassword,
-        otp: undefined,
-        secret: undefined,
-        otpExpiry: undefined,
+        otp: null as any,
+        secret: null as any,
+        otpExpiry: null as any,
       });
 
       // Send password reset success email
       try {
         await this.mailService.sendPasswordResetSuccessEmail(user);
-      } catch (emailError) {
+      } catch (emailError: any) {
         this.logger.warn(
           `Failed to send password reset success email: ${emailError.message}`,
         );
@@ -439,7 +439,7 @@ export class AuthService {
       this.logger.log(`Password reset successful for ${email}`);
 
       return { message: 'Password reset successful' };
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error(`Password reset failed: ${error.message}`);
       throw error;
     }

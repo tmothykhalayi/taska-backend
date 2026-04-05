@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Received</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px 5px 0 0;
+        }
+        .content {
+            background-color: #f8f9fa;
+            padding: 30px;
+            border: 1px solid #dee2e6;
+        }
+        .footer {
+            background-color: #343a40;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 0 0 5px 5px;
+            font-size: 14px;
+        }
+        .highlight {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-left: 4px solid #2196f3;
+            margin: 20px 0;
+        }
+        .application-details {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border: 1px solid #dee2e6;
+        }
+        .next-steps {
+            background-color: #e8f5e8;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #28a745;
+            margin: 20px 0;
+        }
+        .button {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏠 Application Received</h1>
+        <p>Your tenant screening application has been successfully submitted</p>
+    </div>
+
+    <div class="content">
+        <h2>Hello {{applicantName}},</h2>
+        
+        <p>Thank you for submitting your tenant screening application! We have successfully received your application and it is now being processed.</p>
+
+        <div class="application-details">
+            <h3>📋 Application Details</h3>
+            <p><strong>Application Number:</strong> {{applicationNumber}}</p>
+            <p><strong>Property:</strong> {{propertyName}}</p>
+            <p><strong>Submission Date:</strong> {{submissionDate}}</p>
+            <p><strong>Status:</strong> Submitted - Under Review</p>
+        </div>
+
+        <div class="next-steps">
+            <h3>🚀 Next Steps</h3>
+            <p>{{nextSteps}}</p>
+            <ul>
+                <li>Background check will be initiated within 24 hours</li>
+                <li>Credit report will be requested with your consent</li>
+                <li>We may contact you for additional documentation</li>
+                <li>Rental history verification will be conducted</li>
+            </ul>
+        </div>
+
+        <div class="highlight">
+            <h3>📧 What to Expect</h3>
+            <p>You will receive email notifications at each stage of the screening process. The typical timeline is:</p>
+            <ul>
+                <li><strong>Day 1-2:</strong> Initial review and document verification</li>
+                <li><strong>Day 2-3:</strong> Background and credit checks</li>
+                <li><strong>Day 3-5:</strong> Final review and decision</li>
+            </ul>
+        </div>
+
+        <div style="text-align: center; margin: 30px 0;">
+            <a href="{{applicationUrl}}" class="button">View Application Status</a>
+        </div>
+
+        <p><strong>Important:</strong> Please keep this email for your records. Your application number is {{applicationNumber}}.</p>
+
+        <p>If you have any questions about your application or the screening process, please don't hesitate to contact us.</p>
+
+        <p>Best regards,<br>
+        Property Management Team</p>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2024 Property Management System. All rights reserved.</p>
+        <p>This is an automated message. Please do not reply to this email.</p>
+    </div>
+</body>
+</html>

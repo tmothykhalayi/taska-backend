@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Notification - Property Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #0066cc;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .logo {
+            color: #0066cc;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .alert-box {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .info-box {
+            background-color: #e8f4fd;
+            border: 1px solid #0066cc;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .security-box {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #dee2e6;
+            color: #6c757d;
+            font-size: 14px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #dc3545;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        .btn:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🏢 Property Management System</div>
+            <h2>🔐 New Login Detected</h2>
+        </div>
+
+        <p>Hello <strong>{{firstName}} {{lastName}}</strong>,</p>
+
+        <div class="alert-box">
+            <strong>⚠️ Security Alert:</strong> We detected a new login to your Property Management System account.
+        </div>
+
+        <div class="info-box">
+            <h3>Login Details:</h3>
+            <ul>
+                <li><strong>Email:</strong> {{email}}</li>
+                <li><strong>Role:</strong> {{role}}</li>
+                <li><strong>Login Time:</strong> {{loginTime}}</li>
+                <li><strong>IP Address:</strong> {{ipAddress}}</li>
+            </ul>
+        </div>
+
+        <p>If this was you, you can safely ignore this email. If you don't recognize this login activity:</p>
+
+        <div class="security-box">
+            <h3>🚨 Immediate Actions Required:</h3>
+            <ol>
+                <li>Change your password immediately</li>
+                <li>Review your recent account activity</li>
+                <li>Enable two-factor authentication if not already enabled</li>
+                <li>Contact our support team immediately</li>
+            </ol>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="http://localhost:8000/api/docs" class="btn">Secure My Account</a>
+        </div>
+
+        <div class="info-box">
+            <h3>🛡️ Additional Security Tips:</h3>
+            <ul>
+                <li>Use strong, unique passwords</li>
+                <li>Never share your login credentials</li>
+                <li>Log out when finished using the system</li>
+                <li>Monitor your account for unusual activity</li>
+            </ul>
+        </div>
+
+        <div class="footer">
+            <p>This is an automated security notification from Property Management System.</p>
+            <p>If you have any questions, please contact our support team immediately.</p>
+            <p>&copy; 2025 Property Management System. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,99 @@
+version: "3.8"
+
+services:
+  healthsystem-db:
+    image: postgres:15-alpine
+    container_name: healthsystem-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: B3YOND
+      POSTGRES_DB: HealthSystem
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+    volumes:
+      - healthsystem-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:8.0-alpine
+    container_name: redis-cache
+    restart: unless-stopped
+    environment:
+      - REDIS_PASSWORD=passsword
+    command: ["redis-server", "--requirepass", "passsword"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-cache-data:/data
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "passsword", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  healthsystem-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: healthsystem-app
+    ports:
+      - "8000:8000"
+    environment:
+      - NODE_ENV=development
+      - PORT=8000
+      - DB_HOST=healthsystem-db
+      - DB_PORT=5432
+      - DB_NAME=HealthSystem
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=B3YOND
+      - DB_SYNC=true
+      - DB_LOGGING=true
+      - REDIS_URL=redis://:passsword@redis:6379
+      - REDIS_PASSWORD=passsword
+      - JWT_ACCESS_TOKEN_SECRET=your_secure_access_token_secret_here
+      - JWT_ACCESS_TOKEN_EXPIRATION=15m
+      - JWT_REFRESH_TOKEN_SECRET=your_secure_refresh_token_secret_here
+      - JWT_REFRESH_TOKEN_EXPIRATION=7d
+      - THROTTLE_TTL=60
+      - THROTTLE_LIMIT=10
+      - MAIL_HOST=smtp.gmail.com
+      - MAIL_PORT=587
+      - MAIL_USER=timothykhalayi96@gmail.com
+      - MAIL_PASSWORD=tkmj gjmu qodc lyuz
+    depends_on:
+      redis:
+        condition: service_healthy
+      healthsystem-db:
+        condition: service_healthy
+    networks:
+      - app-network
+    volumes:
+      - .:/app
+      - /app/node_modules
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  healthsystem-pgdata:
+    name: healthsystem-pgdata
+    driver: local
+  redis-cache-data:
+    name: redis-cache-data
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge

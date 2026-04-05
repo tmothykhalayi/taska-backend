@@ -5,7 +5,7 @@ import { Request } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Users } from '../../users/entities/user.entity';
+import { User } from '../../users/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 
 interface JwtPayload {
@@ -18,8 +18,8 @@ interface JwtPayload {
 export class RfStrategy extends PassportStrategy(Strategy, 'jwt-rt') {
   constructor(
     private readonly configService: ConfigService,
-    @InjectRepository(Users)
-    private readonly userRepository: Repository<Users>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

@@ -1,0 +1,123 @@
+@baseUrl = http://localhost:5000
+@accessToken = {{login.response.body.accessToken}}
+@refreshToken = {{login.response.body.refreshToken}}
+
+### ==================== AUTHENTICATION ====================
+
+### 1. Sign Up
+# @name signup
+POST {{baseUrl}}/auth/signup
+Content-Type: application/json
+
+{
+  "email": "testuser@example.com",
+  "password": "Password123!",
+  "firstName": "John",
+  "lastName": "Doe",
+  "phoneNumber": "1234567890",
+  "role": "user"
+}
+
+### 2. Sign In
+# @name login
+POST {{baseUrl}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "testuser@example.com",
+  "password": "Password123!"
+}
+
+### 3. Refresh Tokens
+# @name refresh
+POST {{baseUrl}}/auth/refresh
+Authorization: Bearer {{refreshToken}}
+
+### 4. Sign Out
+POST {{baseUrl}}/auth/signout
+Authorization: Bearer {{accessToken}}
+
+### 5. Forgot Password (Send OTP)
+POST {{baseUrl}}/auth/forgot-password
+Content-Type: application/json
+
+{
+  "email": "testuser@example.com"
+}
+
+### 6. Reset Password (Verify OTP)
+POST {{baseUrl}}/auth/reset-password
+Content-Type: application/json
+
+{
+  "email": "testuser@example.com",
+  "otp": "123456",
+  "newPassword": "NewPassword789!"
+}
+
+
+### ==================== USERS ====================
+
+### Get all users
+GET {{baseUrl}}/users
+Authorization: Bearer {{accessToken}}
+
+### Get user by ID
+GET {{baseUrl}}/users/1
+Authorization: Bearer {{accessToken}}
+
+
+### ==================== TASKS ====================
+
+### Get all tasks
+GET {{baseUrl}}/tasks
+Authorization: Bearer {{accessToken}}
+
+### Create a task
+POST {{baseUrl}}/tasks
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "title": "Complete project setup",
+  "description": "Set up NestJS backend and test APIs",
+  "completed": false
+}
+
+### Get specific task by ID
+GET {{baseUrl}}/tasks/1
+Authorization: Bearer {{accessToken}}
+
+### Update a task
+PUT {{baseUrl}}/tasks/1
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "completed": true
+}
+
+### Delete a task
+DELETE {{baseUrl}}/tasks/1
+Authorization: Bearer {{accessToken}}
+
+
+### ==================== STREAKS ====================
+
+### Get user streak info
+GET {{baseUrl}}/streaks/1
+Authorization: Bearer {{accessToken}}
+
+
+### ==================== BADGES ====================
+
+### Get user badges
+GET {{baseUrl}}/badges/1
+Authorization: Bearer {{accessToken}}
+
+
+### ==================== QUOTES ====================
+
+### Get daily motivational quote
+GET {{baseUrl}}/quotes
+Authorization: Bearer {{accessToken}}

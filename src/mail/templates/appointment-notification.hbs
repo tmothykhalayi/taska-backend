@@ -1,0 +1,24 @@
+<html>
+  <body>
+    <h2>Hello {{firstName}} {{lastName}},</h2>
+    <p>
+      {{#if isDoctor}}
+        A new appointment has been booked with patient <strong>{{patientName}}</strong>.<br/>
+        <strong>Date & Time:</strong> {{appointmentDate}}<br/>
+        <strong>Meeting Link (Start):</strong> <a href="{{meetingUrl}}">Start Meeting</a>
+      {{else}}
+        Your appointment with Dr. <strong>{{doctorName}}</strong> has been booked.<br/>
+        <strong>Date & Time:</strong> {{appointmentDate}}<br/>
+        <strong>Meeting Link (Join):</strong> <a href="{{meetingUrl}}">Join Meeting</a>
+      {{/if}}
+    </p>
+    <p>
+      If you have any questions, please contact us.
+    </p>
+    <p>
+      Best regards,<br/>
+      Healthcore Connect Team
+      we value your health and are here to support you. 
+    </p>
+  </body>
+</html> 

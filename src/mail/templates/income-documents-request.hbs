@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Income Documents Required</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #17a2b8;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px 5px 0 0;
+        }
+        .content {
+            background-color: #f8f9fa;
+            padding: 30px;
+            border: 1px solid #dee2e6;
+        }
+        .footer {
+            background-color: #343a40;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 0 0 5px 5px;
+            font-size: 14px;
+        }
+        .urgent-notice {
+            background-color: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .document-list {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border: 1px solid #dee2e6;
+        }
+        .requirements {
+            background-color: #e8f5e8;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #28a745;
+            margin: 20px 0;
+        }
+        .button {
+            display: inline-block;
+            background-color: #17a2b8;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .deadline {
+            background-color: #f8d7da;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #dc3545;
+            margin: 20px 0;
+            text-align: center;
+        }
+        ul li {
+            margin: 8px 0;
+        }
+        .check-icon {
+            color: #28a745;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 Income Documentation Required</h1>
+        <p>Additional documents needed to complete your screening</p>
+    </div>
+
+    <div class="content">
+        <h2>Hello {{applicantName}},</h2>
+        
+        <p>Thank you for submitting your tenant screening application for {{propertyName}}. To complete the income verification portion of your screening, we need additional documentation from you.</p>
+
+        <div class="urgent-notice">
+            <h3>⏰ Action Required</h3>
+            <p><strong>Application Number:</strong> {{applicationNumber}}</p>
+            <p>Your application is currently on hold pending receipt of the required income documents listed below.</p>
+        </div>
+
+        <div class="document-list">
+            <h3>📋 Required Documents</h3>
+            <p>Please provide the following documents to verify your income:</p>
+            <ul>
+                {{#each requiredDocuments}}
+                <li><span class="check-icon">☑️</span>{{this}}</li>
+                {{/each}}
+            </ul>
+        </div>
+
+        <div class="requirements">
+            <h3>📝 Document Requirements</h3>
+            <ul>
+                <li><strong>Pay Stubs:</strong> Must be recent (within 60 days) and show year-to-date totals</li>
+                <li><strong>Employment Letter:</strong> Must be on company letterhead and include:
+                    <ul>
+                        <li>Your job title and employment start date</li>
+                        <li>Your current salary or hourly wage</li>
+                        <li>Whether employment is full-time, part-time, or contract</li>
+                        <li>Contact information for HR verification</li>
+                    </ul>
+                </li>
+                <li><strong>Bank Statements:</strong> Must show consistent income deposits</li>
+                <li><strong>Tax Returns:</strong> Required if self-employed (previous year with Schedule C)</li>
+            </ul>
+        </div>
+
+        <div class="deadline">
+            <h3>⚠️ Important Deadline</h3>
+            <p><strong>Please submit these documents within 5 business days to avoid application expiration.</strong></p>
+            <p>Deadline: {{deadline}}</p>
+        </div>
+
+        <div style="text-align: center; margin: 30px 0;">
+            <a href="{{uploadUrl}}" class="button">Upload Documents Now</a>
+        </div>
+
+        <div class="requirements">
+            <h3>📤 How to Submit</h3>
+            <p>You can submit your documents in any of the following ways:</p>
+            <ul>
+                <li><strong>Online:</strong> Use the secure upload portal (recommended)</li>
+                <li><strong>Email:</strong> Send scanned copies to {{contactEmail}}</li>
+                <li><strong>In-Person:</strong> Drop off at our office during business hours</li>
+                <li><strong>Fax:</strong> {{faxNumber}} (if available)</li>
+            </ul>
+        </div>
+
+        <div class="urgent-notice">
+            <h3>🔒 Privacy & Security</h3>
+            <p>All documents are handled securely and in compliance with privacy laws. Your personal information is protected and will only be used for tenant screening purposes.</p>
+        </div>
+
+        <p><strong>Questions?</strong> If you have any questions about the required documents or need assistance with the upload process, please contact us immediately.</p>
+
+        <p>We appreciate your prompt attention to this request and look forward to completing your application.</p>
+
+        <p>Best regards,<br>
+        Property Management Team</p>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2024 Property Management System. All rights reserved.</p>
+        <p>Contact us: {{contactPhone}} | {{contactEmail}}</p>
+    </div>
+</body>
+</html>

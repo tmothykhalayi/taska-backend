@@ -1,0 +1,44 @@
+FROM node:22-alpine AS builder
+
+RUN npm install -g pnpm
+
+WORKDIR /app
+
+# Remove pnpm-workspace.yaml from here
+COPY package.json pnpm-lock.yaml ./
+
+RUN pnpm install --frozen-lockfile 
+
+COPY . .
+
+RUN pnpm run build
+
+FROM node:22-alpine AS production
+
+RUN npm install -g pnpm && \
+    apk add --no-cache curl
+
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nestjs -u 1001
+
+WORKDIR /app
+
+# Remove pnpm-workspace.yaml here as well
+COPY package.json pnpm-lock.yaml ./
+
+RUN pnpm install --frozen-lockfile --prod &&\
+    pnpm add @nestjs/swagger
+
+COPY --from=builder /app/dist ./dist
+
+RUN mkdir -p /app/applogs && \
+    chown -R nestjs:nodejs /app
+
+USER nestjs
+
+EXPOSE 9000
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:9000/health || exit 1
+
+CMD [ "node", "dist/main.js" ]

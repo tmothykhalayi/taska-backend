@@ -1,7 +1,7 @@
-import { Users } from '../users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 
 export interface SignInResult {
-  user: Partial<Users>;
+  user: Partial<User>;
   accessToken: string;
   refreshToken: string;
   role: string;
