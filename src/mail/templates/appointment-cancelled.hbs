@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+    .container {
+      background-color: #ffffff;
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .header {
+      text-align: center;
+      padding-bottom: 20px;
+      border-bottom: 3px solid #f44336;
+      margin-bottom: 30px;
+    }
+    .header h1 {
+      color: #f44336;
+      margin: 0;
+      font-size: 28px;
+    }
+    .cancelled-box {
+      background-color: #ffebee;
+      padding: 20px;
+      border-radius: 6px;
+      border-left: 4px solid #f44336;
+      margin: 20px 0;
+    }
+    .detail-row {
+      display: flex;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .detail-label {
+      font-weight: bold;
+      min-width: 140px;
+      color: #555;
+    }
+    .detail-value {
+      color: #333;
+      flex: 1;
+    }
+    .action-button {
+      display: inline-block;
+      background-color: #4CAF50;
+      color: white;
+      padding: 12px 30px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: bold;
+      margin: 20px 5px;
+    }
+    .footer {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>❌ Appointment Cancelled</h1>
+    </div>
+
+    <p>Dear <strong>{{patientFirstName}} {{patientLastName}}</strong>,</p>
+    
+    <p>Your therapy appointment has been cancelled.</p>
+
+    <div class="cancelled-box">
+      <h3 style="margin-top: 0; color: #f44336;">Cancelled Appointment Details</h3>
+      <div class="detail-row">
+        <div class="detail-label">📅 Date:</div>
+        <div class="detail-value">{{appointmentDate}}</div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-label">⏰ Time:</div>
+        <div class="detail-value">{{startTime}} - {{endTime}}</div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-label">👨‍⚕️ Therapist:</div>
+        <div class="detail-value">{{therapistName}}</div>
+      </div>
+      {{#if cancelReason}}
+      <div class="detail-row">
+        <div class="detail-label">📝 Reason:</div>
+        <div class="detail-value">{{cancelReason}}</div>
+      </div>
+      {{/if}}
+    </div>
+
+    <div style="text-align: center; margin: 30px 0;">
+      <p><strong>Would you like to schedule a new appointment?</strong></p>
+      <a href="{{portalUrl}}/appointments/new" class="action-button">Book New Appointment</a>
+    </div>
+
+    <div class="footer">
+      <p><strong>CuraMind Technologies - Mental Health Services</strong></p>
+      <p>If you have any questions, please don't hesitate to contact us.</p>
+    </div>
+  </div>
+</body>
+</html>

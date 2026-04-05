@@ -19,8 +19,8 @@ export class MailService {
     try {
       await this.mailerService.sendMail({
         to: user.email,
-        subject: 'New Login Detected - Property Management System',
-        template: 'login-notification-property',
+        subject: 'New Login to Your Healthcare Connect Account',
+        template: 'login-notification',
         context: {
           firstName: user.firstName,
           lastName: user.lastName,
@@ -32,7 +32,7 @@ export class MailService {
       });
 
       this.logger.log(`Login notification sent to ${user.email}`);
-    } catch (error: any) {
+    } catch (error) {
       this.logger.error(
         `Failed to send login notification to ${user.email}: ${error.message}`,
       );
@@ -46,8 +46,8 @@ export class MailService {
     try {
       await this.mailerService.sendMail({
         to: user.email,
-        subject: 'Password Reset Request - Property Management System',
-        template: 'password-reset-property',
+        subject: 'Password Reset Request - Healthcare Connect',
+        template: 'password-reset',
         context: {
           firstName: user.firstName,
           lastName: user.lastName,
@@ -58,7 +58,7 @@ export class MailService {
       });
 
       this.logger.log(`Password reset email sent to ${user.email}`);
-    } catch (error: any) {
+    } catch (error) {
       this.logger.error(
         `Failed to send password reset email to ${user.email}: ${error.message}`,
       );
@@ -74,7 +74,7 @@ export class MailService {
       await this.mailerService.sendMail({
         to: user.email,
         subject: 'Password Successfully Reset - Healthcare Connect',
-        template: 'password-reset-success-property',
+        template: 'password-reset-success',
         context: {
           firstName: user.firstName,
           lastName: user.lastName,
@@ -84,7 +84,7 @@ export class MailService {
       });
 
       this.logger.log(`Password reset success email sent to ${user.email}`);
-    } catch (error: any) {
+    } catch (error) {
       this.logger.error(
         `Failed to send password reset success email to ${user.email}: ${error.message}`,
       );
@@ -99,134 +99,22 @@ export class MailService {
     try {
       await this.mailerService.sendMail({
         to: user.email,
-        subject: 'Welcome to Property Management System!',
-        template: 'welcome-property',
+        subject: 'Welcome to Healthcare Connect!',
+        template: 'welcome',
         context: {
           firstName: user.firstName,
           lastName: user.lastName,
           email: user.email,
           role: user.role,
-          status: user.status,
         },
       });
 
       this.logger.log(`Welcome email sent to ${user.email}`);
-    } catch (error: any) {
+    } catch (error) {
       this.logger.error(
         `Failed to send welcome email to ${user.email}: ${error.message}`,
       );
       // Don't throw error to avoid breaking registration flow
-    }
-  }
-
-  /**
-   * Send welcome email with generated password for new users
-   */
-  async sendWelcomeEmailWithPassword(user: User, password: string): Promise<void> {
-    try {
-      await this.mailerService.sendMail({
-        to: user.email,
-        subject: 'Welcome to Property Management System - Your Login Credentials',
-        template: 'welcome-with-password',
-        context: {
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          role: user.role,
-          status: user.status,
-          password: password,
-        },
-      });
-
-      this.logger.log(`Welcome email with credentials sent to ${user.email}`);
-    } catch (error: any) {
-      this.logger.error(
-        `Failed to send welcome email with credentials to ${user.email}: ${error.message}`,
-      );
-      // Don't throw error to avoid breaking registration flow
-    }
-  }
-
-  /**
-   * Send rent reminder email
-   */
-  async sendRentReminder(
-    email: string,
-    tenantName: string,
-    amount: number,
-    dueDate: Date,
-    unitInfo: string,
-    isOverdue: boolean = false,
-    daysBefore?: number
-  ): Promise<void> {
-    const daysBeforeValue = daysBefore || 0;
-    const urgencyColor = isOverdue ? '#dc3545' : daysBeforeValue <= 3 ? '#ffc107' : '#28a745';
-    const urgencyText = isOverdue 
-      ? 'PAYMENT OVERDUE - IMMEDIATE ACTION REQUIRED'
-      : daysBeforeValue <= 3 
-      ? 'PAYMENT DUE SOON'
-      : 'UPCOMING PAYMENT REMINDER';
-
-    const subject = isOverdue 
-      ? `URGENT: Overdue Rent Payment - ${unitInfo}`
-      : `Rent Payment Reminder - ${unitInfo}`;
-
-    await this.mailerService.sendMail({
-      to: email,
-      subject,
-      template: 'rent-reminder',
-      context: {
-        tenantName,
-        amount: amount.toFixed(2),
-        dueDate: dueDate.toLocaleDateString(),
-        unitInfo,
-        isOverdue,
-        daysBefore: daysBeforeValue,
-        urgencyColor,
-        urgencyText,
-      },
-    });
-  }
-
-  /**
-   * Send payment confirmation email
-   */
-  async sendPaymentConfirmation(payment: any): Promise<void> {
-    try {
-      const tenant = payment.lease?.tenant || payment.payer;
-      const unit = payment.lease?.unit;
-      const property = unit?.property;
-      
-      const confirmationNumber = `PMS-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
-      
-      await this.mailerService.sendMail({
-        to: payment.payer.email,
-        subject: `Payment Confirmation - ${unit?.unitNumber || 'Property Management System'}`,
-        template: 'payment-confirmation',
-        context: {
-          tenantName: `${payment.payer.firstName} ${payment.payer.lastName}`,
-          confirmationNumber,
-          paymentDate: new Date(payment.paidDate).toLocaleDateString(),
-          propertyInfo: property?.name || 'Property Management System',
-          unitInfo: unit?.unitNumber || 'N/A',
-          paymentPeriod: new Date(payment.paidDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
-          baseAmount: Number(payment.amount).toFixed(2),
-          lateFee: payment.lateFee > 0 ? Number(payment.lateFee).toFixed(2) : null,
-          processingFee: payment.processingFee > 0 ? Number(payment.processingFee).toFixed(2) : null,
-          totalAmount: payment.formattedTotalAmount || Number(payment.totalAmount || payment.amount).toFixed(2),
-          paymentMethod: payment.method,
-          transactionId: payment.transactionId || payment.referenceNumber,
-          nextPaymentDue: null, // Can be calculated if lease information is available
-          nextPaymentAmount: null, // Can be calculated if lease information is available
-        },
-      });
-
-      this.logger.log(`Payment confirmation sent to ${payment.payer.email} for transaction ${payment.transactionId}`);
-    } catch (error: any) {
-      this.logger.error(
-        `Failed to send payment confirmation to ${payment.payer.email}: ${error.message}`,
-      );
-      throw error;
     }
   }
 
@@ -242,7 +130,7 @@ export class MailService {
       await this.mailerService.sendMail({
         to: user.email,
         subject: `Security Alert - ${alertType}`,
-        template: 'security-alert-property',
+        template: 'security-alert',
         context: {
           firstName: user.firstName,
           lastName: user.lastName,
@@ -254,10 +142,100 @@ export class MailService {
       });
 
       this.logger.log(`Security alert sent to ${user.email}`);
-    } catch (error: any) {
+    } catch (error) {
       this.logger.error(
         `Failed to send security alert to ${user.email}: ${error.message}`,
       );
+    }
+  }
+
+  /**
+   * Send appointment confirmation email
+   */
+  async sendAppointmentConfirmation(appointmentData: {
+    patientEmail: string;
+    patientFirstName: string;
+    patientLastName: string;
+    therapistName: string;
+    appointmentDate: string;
+    startTime: string;
+    endTime: string;
+    duration: number;
+    status: string;
+    isOnline: boolean;
+    meetingLink?: string;
+    notes?: string;
+  }): Promise<void> {
+    try {
+      await this.mailerService.sendMail({
+        to: appointmentData.patientEmail,
+        subject: 'Appointment Confirmed - Healthcare Connect',
+        template: 'appointment-confirmation',
+        context: {
+          patientFirstName: appointmentData.patientFirstName,
+          patientLastName: appointmentData.patientLastName,
+          therapistName: appointmentData.therapistName,
+          appointmentDate: appointmentData.appointmentDate,
+          startTime: appointmentData.startTime,
+          endTime: appointmentData.endTime,
+          duration: appointmentData.duration,
+          status: appointmentData.status,
+          isOnline: appointmentData.isOnline,
+          meetingLink: appointmentData.meetingLink,
+          notes: appointmentData.notes,
+          portalUrl: process.env.FRONTEND_URL || 'http://localhost:3000',
+        },
+      });
+
+      this.logger.log(
+        `Appointment confirmation sent to ${appointmentData.patientEmail}`,
+      );
+    } catch (error) {
+      this.logger.error(
+        `Failed to send appointment confirmation to ${appointmentData.patientEmail}: ${error.message}`,
+      );
+      // Don't throw to avoid breaking appointment creation
+    }
+  }
+
+  /**
+   * Send appointment cancellation email
+   */
+  async sendAppointmentCancellation(appointmentData: {
+    patientEmail: string;
+    patientFirstName: string;
+    patientLastName: string;
+    therapistName: string;
+    appointmentDate: string;
+    startTime: string;
+    endTime: string;
+    cancelReason?: string;
+  }): Promise<void> {
+    try {
+      await this.mailerService.sendMail({
+        to: appointmentData.patientEmail,
+        subject: 'Appointment Cancelled - Healthcare Connect',
+        template: 'appointment-cancelled',
+        context: {
+          patientFirstName: appointmentData.patientFirstName,
+          patientLastName: appointmentData.patientLastName,
+          therapistName: appointmentData.therapistName,
+          appointmentDate: appointmentData.appointmentDate,
+          startTime: appointmentData.startTime,
+          endTime: appointmentData.endTime,
+          cancelReason: appointmentData.cancelReason,
+          portalUrl: process.env.FRONTEND_URL || 'http://localhost:3000',
+        },
+      });
+
+      this.logger.log(
+        `Appointment cancellation sent to ${appointmentData.patientEmail}`,
+      );
+    } catch (error) {
+      this.logger.error(
+        `Failed to send appointment cancellation to ${appointmentData.patientEmail}: ${error.message}`,
+      );
+      // Don't throw to avoid breaking appointment cancellation
     }
   }
 
@@ -273,7 +251,7 @@ export class MailService {
     try {
       await this.mailerService.sendMail(options);
       this.logger.log(`Custom mail sent to ${options.to}`);
-    } catch (error: any) {
+    } catch (error) {
       this.logger.error(
         `Failed to send custom mail to ${options.to}: ${error.message}`,
       );

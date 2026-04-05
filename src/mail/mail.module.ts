@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/adapters/handlebars.adapter';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MailService } from './mail.service';
 import { join } from 'path';
@@ -19,10 +19,10 @@ import { join } from 'path';
           },
         },
         defaults: {
-          from: `"Property Management System" <${configService.get('MAIL_USER')}>`,
+          from: `"Healthcare Connect" <${configService.get('MAIL_USER')}>`,
         },
         template: {
-          dir: join(__dirname, '../src/mail/templates'),
+          dir: join(__dirname, 'templates'),
           adapter: new HandlebarsAdapter(),
           options: {
             strict: true,

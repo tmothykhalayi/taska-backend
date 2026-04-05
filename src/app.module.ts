@@ -8,16 +8,20 @@ import { StreaksModule } from './streaks/streaks.module';
 import { BadgesModule } from './badges/badges.module';
 import { QuotesModule } from './quotes/quotes.module';
 import { DatabaseModule } from './database/database.module';
+import { AuthModule } from './auth/auth.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     DatabaseModule,
     UsersModule,
+    AuthModule,
     TasksModule,
     StreaksModule,
     BadgesModule,
     QuotesModule,
+    MailModule
   ],
   controllers: [AppController],
   providers: [AppService],

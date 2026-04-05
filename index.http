@@ -1,4 +1,4 @@
-@baseUrl = http://localhost:5000
+@baseUrl = http://localhost:8000
 @accessToken = {{login.response.body.accessToken}}
 @refreshToken = {{login.response.body.refreshToken}}
 
@@ -6,7 +6,7 @@
 
 ### 1. Sign Up
 # @name signup
-POST {{baseUrl}}/auth/signup
+POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
@@ -20,7 +20,7 @@ Content-Type: application/json
 
 ### 2. Sign In
 # @name login
-POST {{baseUrl}}/auth/signin
+POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
