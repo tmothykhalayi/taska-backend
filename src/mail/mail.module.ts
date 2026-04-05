@@ -19,7 +19,7 @@ import { join } from 'path';
           },
         },
         defaults: {
-          from: `"Healthcare Connect" <${configService.get('MAIL_USER')}>`,
+          from: `"Taska" <${configService.get('MAIL_USER')}>`,
         },
         template: {
           dir: join(__dirname, 'templates'),

@@ -19,7 +19,7 @@ export class MailService {
     try {
       await this.mailerService.sendMail({
         to: user.email,
-        subject: 'New Login to Your Healthcare Connect Account',
+        subject: 'New Login to Your Taska Account',
         template: 'login-notification',
         context: {
           firstName: user.firstName,
@@ -46,7 +46,7 @@ export class MailService {
     try {
       await this.mailerService.sendMail({
         to: user.email,
-        subject: 'Password Reset Request - Healthcare Connect',
+        subject: 'Password Reset Request - Taska',
         template: 'password-reset',
         context: {
           firstName: user.firstName,
@@ -73,7 +73,7 @@ export class MailService {
     try {
       await this.mailerService.sendMail({
         to: user.email,
-        subject: 'Password Successfully Reset - Healthcare Connect',
+        subject: 'Password Successfully Reset - Taska',
         template: 'password-reset-success',
         context: {
           firstName: user.firstName,
@@ -99,7 +99,7 @@ export class MailService {
     try {
       await this.mailerService.sendMail({
         to: user.email,
-        subject: 'Welcome to Healthcare Connect!',
+        subject: 'Welcome to Taska!',
         template: 'welcome',
         context: {
           firstName: user.firstName,
@@ -150,97 +150,40 @@ export class MailService {
   }
 
   /**
-   * Send appointment confirmation email
+   * Send task reminder email
    */
-  async sendAppointmentConfirmation(appointmentData: {
-    patientEmail: string;
-    patientFirstName: string;
-    patientLastName: string;
-    therapistName: string;
-    appointmentDate: string;
-    startTime: string;
-    endTime: string;
-    duration: number;
-    status: string;
-    isOnline: boolean;
-    meetingLink?: string;
-    notes?: string;
+  async sendTaskReminder(taskData: {
+    userEmail: string;
+    userFirstName: string;
+    taskTitle: string;
+    dueDate: string;
+    priority?: string;
   }): Promise<void> {
     try {
       await this.mailerService.sendMail({
-        to: appointmentData.patientEmail,
-        subject: 'Appointment Confirmed - Healthcare Connect',
-        template: 'appointment-confirmation',
+        to: taskData.userEmail,
+        subject: 'Task Reminder - Taska',
+        template: 'task-reminder',
         context: {
-          patientFirstName: appointmentData.patientFirstName,
-          patientLastName: appointmentData.patientLastName,
-          therapistName: appointmentData.therapistName,
-          appointmentDate: appointmentData.appointmentDate,
-          startTime: appointmentData.startTime,
-          endTime: appointmentData.endTime,
-          duration: appointmentData.duration,
-          status: appointmentData.status,
-          isOnline: appointmentData.isOnline,
-          meetingLink: appointmentData.meetingLink,
-          notes: appointmentData.notes,
+          userFirstName: taskData.userFirstName,
+          taskTitle: taskData.taskTitle,
+          dueDate: taskData.dueDate,
+          priority: taskData.priority || 'Normal',
           portalUrl: process.env.FRONTEND_URL || 'http://localhost:3000',
         },
       });
 
-      this.logger.log(
-        `Appointment confirmation sent to ${appointmentData.patientEmail}`,
-      );
+      this.logger.log(`Task reminder sent to ${taskData.userEmail}`);
     } catch (error) {
       this.logger.error(
-        `Failed to send appointment confirmation to ${appointmentData.patientEmail}: ${error.message}`,
+        `Failed to send task reminder to ${taskData.userEmail}: ${error.message}`,
       );
-      // Don't throw to avoid breaking appointment creation
+      // Don't throw to avoid breaking the reminder job
     }
   }
 
   /**
-   * Send appointment cancellation email
-   */
-  async sendAppointmentCancellation(appointmentData: {
-    patientEmail: string;
-    patientFirstName: string;
-    patientLastName: string;
-    therapistName: string;
-    appointmentDate: string;
-    startTime: string;
-    endTime: string;
-    cancelReason?: string;
-  }): Promise<void> {
-    try {
-      await this.mailerService.sendMail({
-        to: appointmentData.patientEmail,
-        subject: 'Appointment Cancelled - Healthcare Connect',
-        template: 'appointment-cancelled',
-        context: {
-          patientFirstName: appointmentData.patientFirstName,
-          patientLastName: appointmentData.patientLastName,
-          therapistName: appointmentData.therapistName,
-          appointmentDate: appointmentData.appointmentDate,
-          startTime: appointmentData.startTime,
-          endTime: appointmentData.endTime,
-          cancelReason: appointmentData.cancelReason,
-          portalUrl: process.env.FRONTEND_URL || 'http://localhost:3000',
-        },
-      });
-
-      this.logger.log(
-        `Appointment cancellation sent to ${appointmentData.patientEmail}`,
-      );
-    } catch (error) {
-      this.logger.error(
-        `Failed to send appointment cancellation to ${appointmentData.patientEmail}: ${error.message}`,
-      );
-      // Don't throw to avoid breaking appointment cancellation
-    }
-  }
-
-  /**
-   * Send a custom email (for appointment notifications, etc)
+   * Send a custom email (for streaks, badges, etc)
    */
   async sendCustomMail(options: {
     to: string;

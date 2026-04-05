@@ -52,12 +52,13 @@ export class AuthService {
     }
 
     // 2. Create user with role-specific profile using UsersService
+    const hashedPassword = await bcrypt.hash(createAuthDto.password, 10);
     const user = await this.usersService.createUserWithRole({
       email: createAuthDto.email,
       firstName: createAuthDto.firstName,
       lastName: createAuthDto.lastName,
       phoneNumber: createAuthDto.phoneNumber,
-      password: createAuthDto.password,
+      password: hashedPassword,
       role: createAuthDto.role as unknown as UserRole,
       isEmailVerified: false,
     });
