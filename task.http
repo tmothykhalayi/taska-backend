@@ -1,0 +1,60 @@
+@baseUrl = http://localhost:8000
+@contentType = application/json
+@taskId = 1
+@userId = 1
+
+### Health Check
+GET {{baseUrl}}/
+
+### Get All Tasks
+GET {{baseUrl}}/tasks
+
+### Get Task By ID
+GET {{baseUrl}}/tasks/{{taskId}}
+
+### Create Task
+POST {{baseUrl}}/tasks
+Content-Type: {{contentType}}
+
+{
+  "title": "Prepare project demo",
+  "description": "Finalize slides and run end-to-end tests",
+  "priority": "high",
+  "status": "pending",
+  "category": "Work",
+  "dueDate": "2026-04-15T09:00:00.000Z",
+  "userId": {{userId}}
+}
+
+### Update Task (full admin edit/reassign)
+PATCH {{baseUrl}}/tasks/{{taskId}}
+Content-Type: {{contentType}}
+
+{
+  "title": "Prepare project demo v2",
+  "description": "Slides updated and QA complete",
+  "priority": "medium",
+  "status": "in-progress",
+  "category": "Work",
+  "dueDate": "2026-04-16T12:00:00.000Z",
+  "userId": {{userId}}
+}
+
+### Mark Task Completed
+PATCH {{baseUrl}}/tasks/{{taskId}}
+Content-Type: {{contentType}}
+
+{
+  "status": "completed"
+}
+
+### Reassign Task Only
+PATCH {{baseUrl}}/tasks/{{taskId}}
+Content-Type: {{contentType}}
+
+{
+  "userId": {{userId}}
+}
+
+### Delete Task
+DELETE {{baseUrl}}/tasks/{{taskId}}

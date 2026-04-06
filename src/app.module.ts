@@ -12,6 +12,7 @@ import { AuthModule } from './auth/auth.module';
 import { MailModule } from './mail/mail.module';
 import { LoggerMiddleware} from './logger.middleware';
 import { LogsModule } from './logs/logs.module';
+import { SettingsModule } from './settings/settings.module';
 
 @Module({
   imports: [
@@ -24,7 +25,8 @@ import { LogsModule } from './logs/logs.module';
     BadgesModule,
     QuotesModule,
     MailModule ,
-    LogsModule
+    LogsModule,
+    SettingsModule
   ],
   controllers: [AppController],
   providers: [AppService],
