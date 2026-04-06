@@ -1,7 +1,12 @@
-import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
+import { IsEmail, IsEnum, IsIn, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { UserRole } from '../entities/user.entity';
+
+export const USER_STATUSES = ['active', 'inactive'] as const;
+export type UserStatus = (typeof USER_STATUSES)[number];
 
 export class CreateUserDto {
   @IsNotEmpty()
+  @IsString()
   name: string;
 
   @IsEmail()
@@ -10,4 +15,12 @@ export class CreateUserDto {
   @IsNotEmpty()
   @MinLength(6)
   password: string;
+
+  @IsNotEmpty()
+  @IsEnum(UserRole)
+  role: UserRole;
+
+  @IsNotEmpty()
+  @IsIn(USER_STATUSES)
+  status: UserStatus;
 }
