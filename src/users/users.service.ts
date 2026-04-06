@@ -75,6 +75,10 @@ export class UsersService {
       user.lastName = lastName || firstName;
     }
 
+    if (updateUserDto.phone) {
+      user.phoneNumber = updateUserDto.phone;
+    }
+
     if (updateUserDto.password) {
       user.password = await bcrypt.hash(updateUserDto.password, 10);
     }
