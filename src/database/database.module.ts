@@ -7,9 +7,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
-        const isProduction =
-          configService.get<string>('NODE_ENV') === 'production';
-
         return {
           type: 'postgres',
           host: configService.get<string>('DB_HOST'),
@@ -18,12 +15,16 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
           password: configService.get<string>('DB_PASSWORD'),
           database: configService.get<string>('DB_NAME'),
           entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+          synchronize: true,
 
-          // ✅ FORCE schema sync for first deploy
-          synchronize: true, // <<< changed from !isProduction to true
-
-          // ✅ Render-specific SSL for PostgreSQL
-          ssl: isProduction ? { rejectUnauthorized: false } : false,
+          ssl: {
+            rejectUnauthorized: false,
+          },
+          extra: {
+            ssl: {
+              rejectUnauthorized: false,
+            },
+          },
         };
       },
       inject: [ConfigService],
