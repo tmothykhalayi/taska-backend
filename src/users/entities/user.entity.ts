@@ -3,7 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 import { Task } from '../../tasks/entities/task.entity';
 
 export enum UserRole {
-  USER = 'user',
+  TASKER = 'tasker',
   ADMIN = 'admin',
 }
 
@@ -45,7 +45,7 @@ export class User {
   @Column({ default: 'active' })
   status!: string;
 
-  @Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
+  @Column({ type: 'enum', enum: UserRole, default: UserRole.TASKER })
   role!: UserRole;
 
   @OneToMany(() => Task, task => task.user)

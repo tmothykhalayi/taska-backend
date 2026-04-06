@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Query } from '@nestjs/common';
 import { QuotesService } from './quotes.service';
 import { CreateQuoteDto } from './dto/create-quote.dto';
 
@@ -19,6 +19,11 @@ export class QuotesController {
   @Get('random')
   getRandomQuote() {
     return this.quotesService.getRandomQuote();
+  }
+
+  @Post('fetch-from-api')
+  async fetchAndSaveQuotes(@Query('limit') limit: string = '10') {
+    return this.quotesService.fetchAndSaveQuotes(parseInt(limit));
   }
 
   @Get(':id')

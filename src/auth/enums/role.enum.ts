@@ -1,7 +1,4 @@
 export enum Role {
+  TASKER = 'tasker',
   ADMIN = 'admin',
-  DOCTOR = 'doctor',
-  PATIENT = 'patient',
-  PHARMACIST = 'pharmacist',
-  //SUPER_ADMIN = 'super_admin',
 }

@@ -1,24 +1,39 @@
 @baseUrl = http://localhost:8000
-@accessToken = {{login.response.body.accessToken}}
-@refreshToken = {{login.response.body.refreshToken}}
+@accessToken = {{eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsImVtYWlsIjoidGVzdHVzZXIyQGV4YW1wbGUuY29tIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3NzU0NTMwMjMsImV4cCI6MTc3NTQ4OTAyM30.KxzcJZgWYtS8inAU2irrulCjKInd4XuRu7Bcr85NlhI}}
+@refreshToken = {{eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsImVtYWlsIjoidGVzdHVzZXIyQGV4YW1wbGUuY29tIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3NzU0NTMwMjMsImV4cCI6MTc3NjA1NzgyM30.qgXISbgVtFNFxJqMeVisj4eiWq4OItM7195II9GVqNM}}
 
 ### ==================== AUTHENTICATION ====================
+### Available Roles: "tasker" (default, regular user) | "admin" (system administrator)
 
-### 1. Sign Up
+### 1. Sign Up (Tasker - Regular User)
 # @name signup
 POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
-  "email": "testuser1@example.com",
+  "email": "testuser@example.com",
   "password": "Password123!",
   "firstName": "John",
   "lastName": "Doe",
   "phoneNumber": "1234567890",
-  "role": "user"
+  "role": "tasker"
 }
 
-### 2. Sign In
+### 1b. Sign Up (Admin User)
+# @name signupAdmin
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "AdminPass123!",
+  "firstName": "Admin",
+  "lastName": "User",
+  "phoneNumber": "0987654321",
+  "role": "admin"
+}
+
+### 2. Sign In (Tasker)
 # @name login
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
@@ -42,7 +57,7 @@ POST {{baseUrl}}/auth/forgot-password
 Content-Type: application/json
 
 {
-  "email": "testuser@example.com"
+  "email": "testuser3@example.com"
 }
 
 ### 6. Reset Password (Verify OTP)
@@ -89,7 +104,7 @@ GET {{baseUrl}}/tasks/1
 Authorization: Bearer {{accessToken}}
 
 ### Update a task
-PUT {{baseUrl}}/tasks/1
+PATCH {{baseUrl}}/tasks/1
 Authorization: Bearer {{accessToken}}
 Content-Type: application/json
 
@@ -102,22 +117,156 @@ DELETE {{baseUrl}}/tasks/1
 Authorization: Bearer {{accessToken}}
 
 
-### ==================== STREAKS ====================
+### ==================== MOTIVATION SYSTEM ====================
+### This section demonstrates the gamification/motivation features:
+### - Streaks: Track daily task completion consistency
+### - Badges: Earn achievements for hitting milestones  
+### - Quotes: Daily inspirational messages
 
-### Get user streak info
+### ==================== STREAKS (Consistency Tracking) ====================
+
+### 1. Create a new streak for user
+POST {{baseUrl}}/streaks
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "userId": 1
+}
+
+### 2. Get all streaks
+GET {{baseUrl}}/streaks
+Authorization: Bearer {{accessToken}}
+
+### 3. Get user's current streak info
 GET {{baseUrl}}/streaks/1
 Authorization: Bearer {{accessToken}}
 
+### 4. Update streak - Mark task completed today
+### This increments currentStreak and checks for badge milestones (3, 7, 14 days)
+PATCH {{baseUrl}}/streaks/update/1
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
 
-### ==================== BADGES ====================
+{
+  "completedToday": true
+}
 
-### Get user badges
-GET {{baseUrl}}/badges/1
+### 5. Delete streak
+DELETE {{baseUrl}}/streaks/1
 Authorization: Bearer {{accessToken}}
 
 
-### ==================== QUOTES ====================
+### ==================== BADGES (Achievement System) ====================
 
-### Get daily motivational quote
+### 1. Create a new badge
+POST {{baseUrl}}/badges
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "name": "First Task",
+  "description": "Completed your first task",
+  "milestone": 1
+}
+
+### 2. Get all badges in system
+GET {{baseUrl}}/badges
+Authorization: Bearer {{accessToken}}
+
+### 3. Get user's earned badges - View achievements
+GET {{baseUrl}}/badges/user/1
+Authorization: Bearer {{accessToken}}
+
+### 4. Delete badge
+DELETE {{baseUrl}}/badges/1
+Authorization: Bearer {{accessToken}}
+
+
+### ==================== QUOTES (Daily Motivation - Offline Capable) ====================
+### Smart Quote System with Multiple Sources:
+### 1. External API (Quotable.io) - Fresh quotes from internet
+### 2. Database Cache - Quotes saved locally for offline access  
+### 3. Default Quotes - Auto-seeded 10 motivational quotes as last resort
+###
+### The system intelligently falls back through all sources to always return a quote!
+
+### 1. Get a random daily quote (RECOMMENDED)
+### Smart Logic: Try API → Database → Auto-seed defaults
+### Will ALWAYS return a quote, even offline!
+GET {{baseUrl}}/quotes/random
+Authorization: Bearer {{accessToken}}
+
+### 2. Fetch from Quotable API and save to database
+### Populate database with 20 fresh quotes for offline use
+### Falls back to auto-seed if API is unavailable
+POST {{baseUrl}}/quotes/fetch-from-api?limit=20
+Authorization: Bearer {{accessToken}}
+
+### 3. Add a custom motivational quote manually
+POST {{baseUrl}}/quotes
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "text": "The only way to do great work is to love what you do.",
+  "author": "Steve Jobs"
+}
+
+### 4. Get all quotes from database
 GET {{baseUrl}}/quotes
 Authorization: Bearer {{accessToken}}
+
+### 5. Get specific quote by ID
+GET {{baseUrl}}/quotes/1
+Authorization: Bearer {{accessToken}}
+
+### 6. Delete a quote
+DELETE {{baseUrl}}/quotes/1
+Authorization: Bearer {{accessToken}}
+
+
+### ==================== COMPLETE MOTIVATION FLOW EXAMPLE ====================
+### This demonstrates the full gamification system - Follow the steps:
+
+### STEP 1: Create a streak for user
+POST {{baseUrl}}/streaks
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "userId": 1
+}
+
+### STEP 2: Complete a task
+PATCH {{baseUrl}}/tasks/1
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "completed": true
+}
+
+### STEP 3: Update streak - Mark task completed today
+### Increments currentStreak and checks for badge milestones (3, 7, 14 days)
+PATCH {{baseUrl}}/streaks/update/1
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "completedToday": true
+}
+
+### STEP 4: Check if user earned badges
+### Returns earned achievement badges at 3, 7, 14 day streak milestones
+GET {{baseUrl}}/badges/user/1
+Authorization: Bearer {{accessToken}}
+
+### STEP 5: Get daily motivational quote
+### System automatically returns quote from API, database, or auto-seeded defaults
+GET {{baseUrl}}/quotes/random
+Authorization: Bearer {{accessToken}}
+
+### RESULT: User completes task → Streak increases → Badge earned (if milestone) 
+###         → Quote displayed → User stays motivated! 🎉
