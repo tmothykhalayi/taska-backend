@@ -49,10 +49,13 @@ async function bootstrap() {
     .map((origin) => origin.trim())
     .filter(Boolean);
 
-  const allowedOrigins =
-    corsOrigins.length > 0
-      ? corsOrigins
-      : ['http://localhost:5173', 'http://127.0.0.1:5173'];
+  const defaultOrigins = [
+    'https://taska-rho.vercel.app',
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+  ];
+
+  const allowedOrigins = Array.from(new Set([...corsOrigins, ...defaultOrigins]));
 
   app.enableCors({
     origin: allowedOrigins,
