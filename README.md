@@ -186,6 +186,18 @@ test/
 
 ## 🔌 API Endpoints
 
+### Interactive API Documentation (Swagger)
+When the server is running, OpenAPI docs are available at:
+
+- `http://localhost:8000/api/docs` (Swagger UI)
+- `http://localhost:8000/api/docs-json` (OpenAPI JSON)
+
+For protected routes:
+
+1. Call `POST /auth/login` or `POST /auth/refresh` to get an access token.
+2. In Swagger UI, click **Authorize**.
+3. Paste the token as `Bearer <access_token>`.
+
 ### Authentication
 ```
 POST   /auth/register              - Register new user
