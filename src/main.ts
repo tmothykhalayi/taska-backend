@@ -8,6 +8,7 @@ async function bootstrap() {
   const logger = new Logger('Bootstrap');
   const isProduction = process.env.NODE_ENV === 'production';
 
+  
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
