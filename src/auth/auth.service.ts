@@ -60,6 +60,7 @@ export class AuthService {
       password: hashedPassword,
       role: createAuthDto.role as unknown as UserRole,
       isEmailVerified: false,
+      status: 'inactive',
     });
 
     this.logger.log(`User registered successfully: ${user.email}`);
@@ -100,6 +101,7 @@ export class AuthService {
           'firstName',
           'lastName',
           'role',
+          'status',
           'hashedRefreshToken',
         ],
       });
@@ -109,6 +111,14 @@ export class AuthService {
           `Login failed - user not found: ${loginAuthDto.email}`,
         );
         throw new UnauthorizedException('Invalid credentials');
+      }
+
+      // Check if user status is active
+      if (user.status !== 'active') {
+        this.logger.warn(
+          `Login failed - user account is inactive: ${loginAuthDto.email}`,
+        );
+        throw new UnauthorizedException('Your account is inactive. Please contact an administrator.');
       }
 
       // Compare against 'user.password' which contains the hashed password
