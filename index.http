@@ -798,3 +798,190 @@ GET {{baseUrl}}/logs/user/2
 
 ### Get logs by user ID - User 3
 GET {{baseUrl}}/logs/user/3
+
+
+### ==================== EMAIL TESTING ====================
+### 
+### Email Configuration:
+### Provider: Gmail SMTP
+### MAIL_HOST: smtp.gmail.com:587
+### MAIL_USER: timothykhalayi96@gmail.com
+### FRONTEND_URL: https://taska-rho.vercel.app
+###
+### Test all email flows below:
+
+### 1. WELCOME EMAIL - Triggered on user registration
+### Email sent to: newemail@example.com
+### Template: welcome.hbs
+### Note: This is automatically called during signup
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "welcometest8@example.com",
+  "password": "TestPass123!",
+  "firstName": "Email",
+  "lastName": "Tester",
+  "phoneNumber": "+254700000099",
+  "role": "tasker"
+}
+
+
+### 2. PASSWORD RESET EMAIL - Request OTP for password reset
+### Email sent to: jane@example.com
+### Template: password-reset.hbs
+### Contains: OTP code (expires in 4 minutes)
+POST {{baseUrl}}/auth/forgot-password
+Content-Type: application/json
+
+{
+  "email": "{{email}}"
+}
+
+
+### 3. PASSWORD RESET SUCCESS - Confirmation after successful reset
+### Email sent to: jane@example.com
+### Template: password-reset-success.hbs
+### Note: User must use valid OTP from password-reset email
+POST {{baseUrl}}/auth/reset-password
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "otp": "999999",
+  "newPassword": "NewPassword456!"
+}
+
+
+### 4. TASK ASSIGNED EMAIL - Triggered when creating task for a user
+### Email sent to: task assignee's email
+### Template: task-assigned.hbs
+### Contains: Task title, description, due date, priority, assignee name
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+
+{
+  "title": "Email Test Task - Complete Report",
+  "description": "This task was assigned to test the email notification system. Please review and provide feedback.",
+  "priority": "high",
+  "dueDate": "2026-04-20T15:00:00.000Z",
+  "category": "testing",
+  "userId": 1,
+  "isGlobal": false
+}
+
+
+### 5. TASK ASSIGNED EMAIL - Another task assignment for User 2
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+
+{
+  "title": "Design System Review",
+  "description": "Review the new design system documentation and provide feedback on components and usage guidelines.",
+  "priority": "medium",
+  "dueDate": "2026-04-18T10:00:00.000Z",
+  "category": "design",
+  "userId": 2,
+  "isGlobal": false
+}
+
+
+### 6. TASK ASSIGNED EMAIL - Task for User 3
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+
+{
+  "title": "API Documentation Update",
+  "description": "Update API documentation with new endpoints and authentication changes.",
+  "priority": "high",
+  "dueDate": "2026-04-17T14:00:00.000Z",
+  "category": "documentation",
+  "userId": 3,
+  "isGlobal": false
+}
+
+
+### 7. TASK COMPLETION EMAIL - Mark task as completed
+### Email sent to: task owner's email
+### Template: task-completed.hbs
+### Contains: Celebratory message, task title, completion date, achievements hint
+### Note: Change taskId to match an existing task assigned to a user
+PATCH {{baseUrl}}/tasks/1
+Content-Type: application/json
+
+{
+  "status": "completed"
+}
+
+
+### 8. TASK COMPLETION EMAIL - Complete another task
+PATCH {{baseUrl}}/tasks/2
+Content-Type: application/json
+
+{
+  "status": "completed"
+}
+
+
+### 9. TASK COMPLETION EMAIL - Complete task for User 2
+PATCH {{baseUrl}}/tasks/3
+Content-Type: application/json
+
+{
+  "status": "completed"
+}
+
+
+### ==================== EMAIL TESTING NOTES ====================
+### 
+### How to test emails:
+### 1. Open this file in VS Code REST Client extension
+### 2. Run each test endpoint in sequence
+### 3. Check your email inbox for incoming emails
+### 4. Verify email contains:
+###    - Correct recipient
+###    - Proper template rendering
+###    - Correct data (names, dates, priorities)
+###    - Working links pointing to https://taska-rho.vercel.app
+###
+### Expected Email Flows:
+### 
+### Registration → Welcome Email
+### ├─ User signs up
+### └─ Welcome email automatically sent
+###
+### Forgot Password → Password Reset Email
+### ├─ User requests password reset
+### └─ Email with OTP code sent (4 min expiry)
+###    └─ User submits OTP + new password
+###       └─ Password Reset Success email sent
+###
+### Task Assignment → Task Assigned Email
+### ├─ Admin creates task for user
+### └─ Email notification sent to assignee
+###    ├─ Task title, description
+###    ├─ Due date, priority
+###    └─ Link to portal (https://taska-rho.vercel.app)
+###
+### Task Completion → Completion Email
+### ├─ User marks task as completed
+### └─ Celebratory email sent to user
+###    ├─ Task name
+###    ├─ Completion date
+###    └─ Achievements/Streak hint
+###
+### Email Template Locations:
+### - src/mail/templates/welcome.hbs
+### - src/mail/templates/password-reset.hbs
+### - src/mail/templates/password-reset-success.hbs
+### - src/mail/templates/task-assigned.hbs
+### - src/mail/templates/task-reminder.hbs
+### - src/mail/templates/task-completed.hbs
+### - src/mail/templates/login-notification.hbs
+### - src/mail/templates/security-alert.hbs
+###
+### Troubleshooting:
+### - Check .env file for MAIL_HOST, MAIL_USER, MAIL_PASSWORD
+### - Verify Gmail account allows Less Secure Apps or use App Password
+### - Check logs for "Failed to send email" messages
+### - FRONTEND_URL determines email links destination

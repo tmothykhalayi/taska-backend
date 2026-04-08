@@ -183,6 +183,74 @@ export class MailService {
   }
 
   /**
+   * Send task assigned notification email
+   */
+  async sendTaskAssignedEmail(taskData: {
+    assigneeEmail: string;
+    assigneeFirstName: string;
+    taskTitle: string;
+    taskDescription?: string;
+    dueDate?: string;
+    priority?: string;
+    assignedBy?: string;
+  }): Promise<void> {
+    try {
+      await this.mailerService.sendMail({
+        to: taskData.assigneeEmail,
+        subject: `New Task Assigned: ${taskData.taskTitle}`,
+        template: 'task-assigned',
+        context: {
+          assigneeFirstName: taskData.assigneeFirstName,
+          taskTitle: taskData.taskTitle,
+          taskDescription: taskData.taskDescription || 'No description provided',
+          dueDate: taskData.dueDate || 'No due date',
+          priority: taskData.priority || 'Normal',
+          assignedBy: taskData.assignedBy || 'Taska Admin',
+          portalUrl: process.env.FRONTEND_URL || 'http://localhost:3000',
+        },
+      });
+
+      this.logger.log(`Task assigned email sent to ${taskData.assigneeEmail}`);
+    } catch (error) {
+      this.logger.error(
+        `Failed to send task assigned email to ${taskData.assigneeEmail}: ${error.message}`,
+      );
+      // Don't throw to avoid breaking task creation
+    }
+  }
+
+  /**
+   * Send task completion notification email
+   */
+  async sendTaskCompletedEmail(taskData: {
+    userEmail: string;
+    userFirstName: string;
+    taskTitle: string;
+    completedDate?: string;
+  }): Promise<void> {
+    try {
+      await this.mailerService.sendMail({
+        to: taskData.userEmail,
+        subject: `Task Completed: ${taskData.taskTitle}`,
+        template: 'task-completed',
+        context: {
+          userFirstName: taskData.userFirstName,
+          taskTitle: taskData.taskTitle,
+          completedDate: taskData.completedDate || new Date().toLocaleString(),
+          portalUrl: process.env.FRONTEND_URL || 'http://localhost:3000',
+        },
+      });
+
+      this.logger.log(`Task completion email sent to ${taskData.userEmail}`);
+    } catch (error) {
+      this.logger.error(
+        `Failed to send task completion email to ${taskData.userEmail}: ${error.message}`,
+      );
+      // Don't throw to avoid breaking task update
+    }
+  }
+
+  /**
    * Send a custom email (for streaks, badges, etc)
    */
   async sendCustomMail(options: {

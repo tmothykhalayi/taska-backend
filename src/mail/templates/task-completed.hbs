@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Completed - Taska</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #4caf50;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .logo {
+            color: #4caf50;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .celebration {
+            font-size: 50px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .task-box {
+            background-color: #e8f5e9;
+            border: 2px solid #c8e6c9;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .task-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 15px;
+        }
+        .task-detail {
+            margin: 12px 0;
+            padding: 10px;
+            background-color: white;
+            border-radius: 5px;
+            border-left: 3px solid #4caf50;
+        }
+        .task-detail strong {
+            color: #4caf50;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: #4caf50;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .cta-button:hover {
+            background-color: #388e3c;
+        }
+        .achievements-hint {
+            background-color: #fff9c4;
+            border: 2px solid #fff59d;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">✅ Excellent Work!</div>
+            <p>You have successfully completed a task</p>
+        </div>
+
+        <div class="celebration">🎉</div>
+
+        <p>Hi <strong>{{userFirstName}}</strong>,</p>
+
+        <p>Congratulations! You have successfully completed the following task:</p>
+
+        <div class="task-box">
+            <div class="task-title">{{taskTitle}}</div>
+            
+            <div class="task-detail">
+                <strong>✓ Completed on:</strong> {{completedDate}}
+            </div>
+
+            <p style="text-align: center; margin-top: 15px; color: #2e7d32; font-weight: bold;">
+                Task marked as complete! 🏆
+            </p>
+        </div>
+
+        <p>Great job staying on top of your tasks! Your productivity is impressive. Keep up the excellent work.</p>
+
+        <div class="achievements-hint">
+            <p>💡 <strong>Did you know?</strong> Completing tasks consistently can earn you badges and streaks!</p>
+        </div>
+
+        <a href="{{portalUrl}}/tasks" class="cta-button">View More Tasks</a>
+
+        <div class="footer">
+            <p>This is an automated message from Taska. Please do not reply to this email.</p>
+            <p>&copy; 2026 Taska. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

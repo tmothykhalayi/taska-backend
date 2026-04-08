@@ -67,7 +67,17 @@ export class AuthService {
 
     this.logger.log(`User registered successfully: ${user.email}`);
 
-    // 3. Return only user info (tokens are provided on login)
+    // 3. Send welcome email (non-blocking)
+    try {
+      await this.mailService.sendWelcomeEmail(user);
+    } catch (emailError: any) {
+      this.logger.warn(
+        `Failed to send welcome email to ${user.email}: ${emailError.message}`,
+      );
+      // Don't throw - registration should succeed even if email fails
+    }
+
+    // 4. Return only user info (tokens are provided on login)
     return {
       message: 'User registered successfully. Please login to get access token.',
       user: {

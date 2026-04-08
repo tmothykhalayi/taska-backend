@@ -4,9 +4,10 @@ import { TasksService } from './tasks.service';
 import { TasksController } from './tasks.controller';
 import { Task } from './entities/task.entity';
 import { UsersModule } from '../users/users.module';
+import { MailModule } from '../mail/mail.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Task]), UsersModule],
+  imports: [TypeOrmModule.forFeature([Task]), UsersModule, MailModule],
   controllers: [TasksController],
   providers: [TasksService],
 })

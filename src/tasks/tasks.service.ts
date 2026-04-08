@@ -5,6 +5,7 @@ import { Task, TaskStatus } from './entities/task.entity';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { UsersService } from '../users/users.service';
+import { MailService } from '../mail/mail.service';
 import { User } from '../users/entities/user.entity';
 
 @Injectable()
@@ -13,6 +14,7 @@ export class TasksService {
     @InjectRepository(Task)
     private readonly taskRepository: Repository<Task>,
     private readonly usersService: UsersService,
+    private readonly mailService: MailService,
   ) {}
 
   async create(createTaskDto: CreateTaskDto): Promise<Task> {
@@ -37,7 +39,27 @@ export class TasksService {
       isGlobal: createTaskDto.isGlobal ?? false,
       user,
     });
-    return this.taskRepository.save(task);
+    
+    const savedTask = await this.taskRepository.save(task);
+
+    // Send task assigned email if task is assigned to a specific user
+    if (user && user.email) {
+      try {
+        await this.mailService.sendTaskAssignedEmail({
+          assigneeEmail: user.email,
+          assigneeFirstName: user.firstName,
+          taskTitle: savedTask.title,
+          taskDescription: savedTask.description || undefined,
+          dueDate: savedTask.dueDate ? savedTask.dueDate.toLocaleDateString() : undefined,
+          priority: savedTask.priority,
+        });
+      } catch (emailError) {
+        // Log but don't fail task creation if email fails
+        console.error('Failed to send task assigned email:', emailError);
+      }
+    }
+
+    return savedTask;
   }
 
   findAll(): Promise<Task[]> {
@@ -52,6 +74,8 @@ export class TasksService {
 
   async update(id: number, updateTaskDto: UpdateTaskDto): Promise<Task> {
     const task = await this.findOne(id);
+    const wasCompleted = task.completed;
+
     if (updateTaskDto.userId) {
       const user = await this.usersService.findOne(updateTaskDto.userId);
       task.user = user;
@@ -74,7 +98,24 @@ export class TasksService {
       task.completed = updateTaskDto.status === TaskStatus.COMPLETED;
     }
 
-    return this.taskRepository.save(task);
+    const updatedTask = await this.taskRepository.save(task);
+
+    // Send task completed email if task was just marked as completed
+    if (!wasCompleted && updatedTask.completed && updatedTask.user && updatedTask.user.email) {
+      try {
+        await this.mailService.sendTaskCompletedEmail({
+          userEmail: updatedTask.user.email,
+          userFirstName: updatedTask.user.firstName,
+          taskTitle: updatedTask.title,
+          completedDate: new Date().toLocaleString(),
+        });
+      } catch (emailError) {
+        // Log but don't fail task update if email fails
+        console.error('Failed to send task completion email:', emailError);
+      }
+    }
+
+    return updatedTask;
   }
 
   async remove(id: number): Promise<void> {
