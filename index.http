@@ -170,8 +170,20 @@ GET {{baseUrl}}/users
 ### 3 = timothykhalayi96@gmail.com
 ### 4 = nandwatimothykhalayi@gmail.com
 
+### Get user by ID - User 1
+GET {{baseUrl}}/users/1
+
+### Get user by ID - User 2
+GET {{baseUrl}}/users/2
+
+### Get user by ID - User 3
+GET {{baseUrl}}/users/3
+
+### Get user by ID - User 4
+GET {{baseUrl}}/users/4
+
 ### Update user by ID
-PATCH {{baseUrl}}/users/{{userId}}
+PATCH {{baseUrl}}/users/1
 Content-Type: application/json
 
 {
@@ -180,7 +192,7 @@ Content-Type: application/json
 }
 
 ### Delete user by ID
-DELETE {{baseUrl}}/users/{{userId}}
+DELETE {{baseUrl}}/users/1
 
 
 ### ==================== TASKS ====================
@@ -256,7 +268,7 @@ Content-Type: application/json
   "status": "pending",
   "category": "work",
   "dueDate": "2026-04-09T14:00:00.000Z",
-  "userId": {{userId}},
+  "userId": 1,
   "isGlobal": false
 }
 
@@ -271,7 +283,7 @@ Content-Type: application/json
   "status": "pending",
   "category": "documentation",
   "dueDate": "2026-04-15T09:00:00.000Z",
-  "userId": {{userId}},
+  "userId": 1,
   "isGlobal": false
 }
 
@@ -286,7 +298,7 @@ Content-Type: application/json
   "status": "pending",
   "category": "meeting",
   "dueDate": "2026-04-11T10:00:00.000Z",
-  "userId": {{userId}},
+  "userId": 2,
   "isGlobal": false
 }
 
@@ -301,7 +313,7 @@ Content-Type: application/json
   "status": "pending",
   "category": "bug",
   "dueDate": "2026-04-08T17:00:00.000Z",
-  "userId": {{userId}},
+  "userId": 3,
   "isGlobal": false
 }
 
@@ -375,6 +387,38 @@ Content-Type: application/json
   "isGlobal": true
 }
 
+### Create additional personified tasks
+
+### Additional task for user 4
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+
+{
+  "title": "Admin audit trails setup",
+  "description": "Configure audit logging and monitoring",
+  "priority": "high",
+  "status": "pending",
+  "category": "security",
+  "dueDate": "2026-04-09T16:00:00.000Z",
+  "userId": 4,
+  "isGlobal": false
+}
+
+### Additional task for user 5
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+
+{
+  "title": "User onboarding guide",
+  "description": "Create comprehensive onboarding documentation",
+  "priority": "medium",
+  "status": "pending",
+  "category": "documentation",
+  "dueDate": "2026-04-12T14:00:00.000Z",
+  "userId": 5,
+  "isGlobal": false
+}
+
 ### Get all tasks
 GET {{baseUrl}}/tasks
 
@@ -382,10 +426,22 @@ GET {{baseUrl}}/tasks
 GET {{baseUrl}}/tasks/global/all
 
 ### Get tasks for user (including global tasks)
-GET {{baseUrl}}/tasks/user/{{userId}}
+GET {{baseUrl}}/tasks/user/1
 
 ### Get only personified tasks for user
-GET {{baseUrl}}/tasks/user/{{userId}}/personal
+GET {{baseUrl}}/tasks/user/1/personal
+
+### Get tasks for user (including global tasks) - User 2
+GET {{baseUrl}}/tasks/user/2
+
+### Get only personified tasks for user - User 2
+GET {{baseUrl}}/tasks/user/2/personal
+
+### Get tasks for user (including global tasks) - User 3
+GET {{baseUrl}}/tasks/user/3
+
+### Get only personified tasks for user - User 3
+GET {{baseUrl}}/tasks/user/3/personal
 
 ### Get task by ID
 GET {{baseUrl}}/tasks/{{taskId}}
@@ -405,13 +461,49 @@ DELETE {{baseUrl}}/tasks/{{taskId}}
 
 ### ==================== STREAKS ====================
 
-### Create streak
+### Create streak - User 1
 POST {{baseUrl}}/streaks
 Content-Type: application/json
 
 {
-  "userId": {{userId}},
+  "userId": 1,
   "lastCompletedDate": "2026-04-06T00:00:00.000Z"
+}
+
+### Create streak - User 2
+POST {{baseUrl}}/streaks
+Content-Type: application/json
+
+{
+  "userId": 2,
+  "lastCompletedDate": "2026-04-07T00:00:00.000Z"
+}
+
+### Create streak - User 3
+POST {{baseUrl}}/streaks
+Content-Type: application/json
+
+{
+  "userId": 3,
+  "lastCompletedDate": "2026-04-05T00:00:00.000Z"
+}
+
+### Create streak - User 4
+POST {{baseUrl}}/streaks
+Content-Type: application/json
+
+{
+  "userId": 4,
+  "lastCompletedDate": "2026-04-04T00:00:00.000Z"
+}
+
+### Create streak - User 5
+POST {{baseUrl}}/streaks
+Content-Type: application/json
+
+{
+  "userId": 5,
+  "lastCompletedDate": "2026-04-03T00:00:00.000Z"
 }
 
 ### Get all streaks
@@ -420,8 +512,49 @@ GET {{baseUrl}}/streaks
 ### Get streak by ID
 GET {{baseUrl}}/streaks/{{streakId}}
 
-### Update user streak by userId
-PATCH {{baseUrl}}/streaks/update/{{userId}}
+### Get streak by ID - Streak 1
+GET {{baseUrl}}/streaks/1
+
+### Get streak by ID - Streak 2
+GET {{baseUrl}}/streaks/2
+
+### Get streak by ID - Streak 3
+GET {{baseUrl}}/streaks/3
+
+### Update user streak by userId - User 1
+PATCH {{baseUrl}}/streaks/update/1
+Content-Type: application/json
+
+{
+  "completedToday": true
+}
+
+### Update user streak by userId - User 2
+PATCH {{baseUrl}}/streaks/update/2
+Content-Type: application/json
+
+{
+  "completedToday": true
+}
+
+### Update user streak by userId - User 3
+PATCH {{baseUrl}}/streaks/update/3
+Content-Type: application/json
+
+{
+  "completedToday": true
+}
+
+### Update user streak by userId - User 4
+PATCH {{baseUrl}}/streaks/update/4
+Content-Type: application/json
+
+{
+  "completedToday": true
+}
+
+### Update user streak by userId - User 5
+PATCH {{baseUrl}}/streaks/update/5
 Content-Type: application/json
 
 {
@@ -434,7 +567,7 @@ DELETE {{baseUrl}}/streaks/{{streakId}}
 
 ### ==================== BADGES ====================
 
-### Create badge
+### Create badge - User 1
 POST {{baseUrl}}/badges
 Content-Type: application/json
 
@@ -442,14 +575,70 @@ Content-Type: application/json
   "name": "3-Day Streak",
   "description": "Completed tasks for 3 consecutive days",
   "milestone": 3,
-  "userId": {{userId}}
+  "userId": 1
+}
+
+### Create badge - User 2
+POST {{baseUrl}}/badges
+Content-Type: application/json
+
+{
+  "name": "Week Warrior",
+  "description": "Completed tasks for 7 consecutive days",
+  "milestone": 7,
+  "userId": 2
+}
+
+### Create badge - User 3
+POST {{baseUrl}}/badges
+Content-Type: application/json
+
+{
+  "name": "Task Master",
+  "description": "Completed 10 tasks",
+  "milestone": 10,
+  "userId": 3
+}
+
+### Create badge - User 4
+POST {{baseUrl}}/badges
+Content-Type: application/json
+
+{
+  "name": "Perfect Month",
+  "description": "Completed tasks every day for a month",
+  "milestone": 30,
+  "userId": 4
+}
+
+### Create badge - User 5
+POST {{baseUrl}}/badges
+Content-Type: application/json
+
+{
+  "name": "Early Bird",
+  "description": "Complete 5 tasks before 9 AM",
+  "milestone": 5,
+  "userId": 5
 }
 
 ### Get all badges
 GET {{baseUrl}}/badges
 
-### Get badges by user ID
-GET {{baseUrl}}/badges/user/{{userId}}
+### Get badges by user ID - User 1
+GET {{baseUrl}}/badges/user/1
+
+### Get badges by user ID - User 2
+GET {{baseUrl}}/badges/user/2
+
+### Get badges by user ID - User 3
+GET {{baseUrl}}/badges/user/3
+
+### Get badges by user ID - User 4
+GET {{baseUrl}}/badges/user/4
+
+### Get badges by user ID - User 5
+GET {{baseUrl}}/badges/user/5
 
 ### Delete badge by ID
 DELETE {{baseUrl}}/badges/{{badgeId}}
@@ -457,7 +646,7 @@ DELETE {{baseUrl}}/badges/{{badgeId}}
 
 ### ==================== QUOTES ====================
 
-### Create quote
+### Create quote 1
 POST {{baseUrl}}/quotes
 Content-Type: application/json
 
@@ -466,17 +655,98 @@ Content-Type: application/json
   "author": "Taska"
 }
 
+### Create quote 2
+POST {{baseUrl}}/quotes
+Content-Type: application/json
+
+{
+  "text": "The only way to do great work is to love what you do.",
+  "author": "Steve Jobs"
+}
+
+### Create quote 3
+POST {{baseUrl}}/quotes
+Content-Type: application/json
+
+{
+  "text": "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+  "author": "Winston Churchill"
+}
+
+### Create quote 4
+POST {{baseUrl}}/quotes
+Content-Type: application/json
+
+{
+  "text": "Don't watch the clock; do what it does. Keep going.",
+  "author": "Sam Levenson"
+}
+
+### Create quote 5
+POST {{baseUrl}}/quotes
+Content-Type: application/json
+
+{
+  "text": "The future belongs to those who believe in the beauty of their dreams.",
+  "author": "Eleanor Roosevelt"
+}
+
+### Create quote 6
+POST {{baseUrl}}/quotes
+Content-Type: application/json
+
+{
+  "text": "It does not matter how slowly you go as long as you do not stop.",
+  "author": "Confucius"
+}
+
+### Create quote 7
+POST {{baseUrl}}/quotes
+Content-Type: application/json
+
+{
+  "text": "Believe you can and you're halfway there.",
+  "author": "Theodore Roosevelt"
+}
+
+### Create quote 8
+POST {{baseUrl}}/quotes
+Content-Type: application/json
+
+{
+  "text": "The best time to plant a tree was 20 years ago. The second best time is now.",
+  "author": "Chinese Proverb"
+}
+
 ### Get all quotes
 GET {{baseUrl}}/quotes
 
 ### Get random quote
 GET {{baseUrl}}/quotes/random
 
+### Get random quote (try multiple times for different quotes)
+GET {{baseUrl}}/quotes/random
+
+### Get random quote (try multiple times for different quotes)
+GET {{baseUrl}}/quotes/random
+
 ### Fetch and save quotes from API
 POST {{baseUrl}}/quotes/fetch-from-api?limit=20
 
-### Get quote by ID
-GET {{baseUrl}}/quotes/{{quoteId}}
+### Get quote by ID - Quote 1
+GET {{baseUrl}}/quotes/1
+
+### Get quote by ID - Quote 2
+GET {{baseUrl}}/quotes/2
+
+### Get quote by ID - Quote 3
+GET {{baseUrl}}/quotes/3
+
+### Get quote by ID - Quote 4
+GET {{baseUrl}}/quotes/4
+
+### Get quote by ID - Quote 5
+GET {{baseUrl}}/quotes/5
 
 ### Delete quote by ID
 DELETE {{baseUrl}}/quotes/{{quoteId}}
@@ -521,4 +791,10 @@ Content-Type: application/json
 GET {{baseUrl}}/logs
 
 ### Get logs by user ID
-GET {{baseUrl}}/logs/user/{{userId}}
+GET {{baseUrl}}/logs/user/1
+
+### Get logs by user ID - User 2
+GET {{baseUrl}}/logs/user/2
+
+### Get logs by user ID - User 3
+GET {{baseUrl}}/logs/user/3

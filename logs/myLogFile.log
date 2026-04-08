@@ -3,3 +3,5 @@
 4/8/26, 4:19 PM - IP: ::ffff:127.0.0.1 - ERROR: invalid input syntax for type integer: "NaN" - Path: /users/%7B%7Blogin.response.body.$.user.id%7D%7D
 4/8/26, 4:24 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"User with id 1 not found","error":"Not Found","statusCode":404} - Path: /tasks
 4/8/26, 4:24 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"User with id 2 not found","error":"Not Found","statusCode":404} - Path: /tasks
+4/8/26, 4:31 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Expected property name or '}' in JSON at position 227 (line 8 column 14)","error":"Bad Request","statusCode":400} - Path: /tasks
+4/8/26, 4:32 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Expected property name or '}' in JSON at position 237 (line 8 column 14)","error":"Bad Request","statusCode":400} - Path: /tasks
