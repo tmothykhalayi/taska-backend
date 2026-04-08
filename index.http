@@ -1,10 +1,11 @@
-@baseUrl = https://healthcare-connect-dwg6.onrender.com
-### For local testing, switch to:
-### @baseUrl = http://localhost:8000
+### For local testing, use:
+@baseUrl = http://localhost:8000
+### For production (Render), use:
+### @baseUrl = https://your-render-app.onrender.com
 
-@email = timothykhalayi96@gmail.com
+@email = jane@example.com
 @password = Password123!
-@userId = 1
+@userId = 2
 @taskId = 1
 @streakId = 1
 @badgeId = 1
@@ -17,8 +18,9 @@
 @refreshToken =
 
 ### Option B: if your REST Client supports named-response variables
-### @accessToken = {{login.response.body.$.accessToken}}
-### @refreshToken = {{login.response.body.$.refreshToken}}
+@accessToken = {{login.response.body.$.accessToken}}
+@refreshToken = {{login.response.body.$.refreshToken}}
+@userId = {{login.response.body.$.user.id}}
 
 ### ==================== HEALTH + DOCS ====================
 
@@ -34,32 +36,70 @@ GET {{baseUrl}}/api/docs-json
 
 ### ==================== AUTH ====================
 
-### Register tasker user
+### Register new tasker user
 # @name register
 POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
-  "email": "{{email}}",
-  "password": "{{password}}",
-  "firstName": "John",
-  "lastName": "Doe",
+  "email": "newtasker@example.com",
+  "password": "Password123!",
+  "firstName": "New",
+  "lastName": "Tasker",
   "phoneNumber": "+254700000000",
   "role": "tasker"
 }
 
-### Register admin user
+### Register tasker user 1
 POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
-  "email": "nandwatimothykhalayi1@gmail.com",
-  "password": "AdminPass123!",
-  "firstName": "Admin",
+  "email": "odhi@gmail.com",
+  "password": "Password123!",
+  "firstName": "Odhi",
   "lastName": "User",
-  "phoneNumber": "+254711111111",
-  "role": "admin",
-  "status": "active"
+  "phoneNumber": "+254700000003",
+  "role": "tasker"
+}
+
+### Register tasker user 2
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "timothykhalayi96@gmail.com",
+  "password": "Password123!",
+  "firstName": "Timothy",
+  "lastName": "Khalayi",
+  "phoneNumber": "+254700000004",
+  "role": "tasker"
+}
+
+### Register admin user 1
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "nandwatimothykhalayi@gmail.com",
+  "password": "AdminPass123!",
+  "firstName": "Timothy",
+  "lastName": "Khalayi",
+  "phoneNumber": "+254700000001",
+  "role": "admin"
+}
+
+### Register admin user 2
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "adhis@gmail.com",
+  "password": "AdminPass123!",
+  "firstName": "Adhis",
+  "lastName": "Admin",
+  "phoneNumber": "+254700000002",
+  "role": "admin"
 }
 
 ### Login
@@ -134,7 +174,7 @@ DELETE {{baseUrl}}/users/{{userId}}
 
 ### ==================== TASKS ====================
 
-### Create task
+### Create personified task
 POST {{baseUrl}}/tasks
 Content-Type: application/json
 
@@ -145,11 +185,35 @@ Content-Type: application/json
   "status": "pending",
   "category": "work",
   "dueDate": "2026-04-10T10:00:00.000Z",
-  "userId": {{userId}}
+  "userId": {{userId}},
+  "isGlobal": false
+}
+
+### Create global task
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+
+{
+  "title": "Team standup meeting",
+  "description": "Daily team sync",
+  "priority": "medium",
+  "status": "pending",
+  "category": "work",
+  "dueDate": "2026-04-09T10:00:00.000Z",
+  "isGlobal": true
 }
 
 ### Get all tasks
 GET {{baseUrl}}/tasks
+
+### Get all global tasks
+GET {{baseUrl}}/tasks/global/all
+
+### Get tasks for user (including global tasks)
+GET {{baseUrl}}/tasks/user/{{userId}}
+
+### Get only personified tasks for user
+GET {{baseUrl}}/tasks/user/{{userId}}/personal
 
 ### Get task by ID
 GET {{baseUrl}}/tasks/{{taskId}}
