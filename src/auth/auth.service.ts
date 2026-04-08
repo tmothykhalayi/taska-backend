@@ -370,10 +370,19 @@ export class AuthService {
         otpExpiry: new Date(Date.now() + 4 * 60 * 1000), // 4 minutes from now
       });
 
-      // Send password reset email
-      await this.mailService.sendPasswordResetEmail(user, otp);
-
-      this.logger.log(`Password reset email sent to ${email}`);
+      // Send password reset email (do not fail the request if SMTP is unavailable)
+      try {
+        await this.mailService.sendPasswordResetEmail(user, otp);
+        this.logger.log(`Password reset email sent to ${email}`);
+      } catch (mailError: any) {
+        this.logger.error(
+          `Password reset OTP created but email delivery failed for ${email}: ${mailError.message}`,
+        );
+        return {
+          message:
+            'Password reset OTP created, but email delivery is delayed. Please try again shortly.',
+        };
+      }
 
       return { message: 'Password reset email sent successfully' };
     } catch (error: any) {
