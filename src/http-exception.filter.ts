@@ -3,8 +3,10 @@ import {
   HttpException,
   HttpStatus,
   ArgumentsHost,
+  Inject,
 } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
+import { HttpAdapterHost } from '@nestjs/core';
 import { Request, Response } from 'express';
 import { LogsService } from './logs/logs.service';
 
@@ -19,10 +21,10 @@ interface MyResponseObj {
 @Catch()
 export class AllExceptionsFilter extends BaseExceptionFilter {
   constructor(
-    httpAdapter: any,
+    protected readonly httpAdapterHost: HttpAdapterHost,
     private readonly logs: LogsService,
   ) {
-    super(httpAdapter);
+    super(httpAdapterHost.httpAdapter);
   }
 
   private getClientIp(request: Request): string {
@@ -55,8 +57,11 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
       myResponseObj.response = exception.getResponse();
     } else if (exception instanceof Error) {
       myResponseObj.response = exception.message;
+      console.error('ERROR DETAILS:', exception); // Log full error to console
+      console.error('STACK:', exception.stack); // Log stack trace
     } else {
       myResponseObj.response = 'Internal Server Error';
+      console.error('UNKNOWN ERROR:', exception);
     }
 
     response.status(myResponseObj.statusCode).json(myResponseObj);

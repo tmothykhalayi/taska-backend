@@ -1,4 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
+import { APP_FILTER } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -13,6 +14,7 @@ import { MailModule } from './mail/mail.module';
 import { LoggerMiddleware} from './logger.middleware';
 import { LogsModule } from './logs/logs.module';
 import { SettingsModule } from './settings/settings.module';
+import { AllExceptionsFilter } from './http-exception.filter';
 
 @Module({
   imports: [
@@ -29,7 +31,13 @@ import { SettingsModule } from './settings/settings.module';
     SettingsModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
