@@ -1,2 +1,5 @@
 4/8/26, 3:11 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"User with id 1 not found","error":"Not Found","statusCode":404} - Path: /tasks
 4/8/26, 3:51 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":["property status should not exist"],"error":"Bad Request","statusCode":400} - Path: /auth/register
+4/8/26, 4:19 PM - IP: ::ffff:127.0.0.1 - ERROR: invalid input syntax for type integer: "NaN" - Path: /users/%7B%7Blogin.response.body.$.user.id%7D%7D
+4/8/26, 4:24 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"User with id 1 not found","error":"Not Found","statusCode":404} - Path: /tasks
+4/8/26, 4:24 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"User with id 2 not found","error":"Not Found","statusCode":404} - Path: /tasks

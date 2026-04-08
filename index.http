@@ -13,6 +13,12 @@
 @globalTaskId = 2
 @personalTaskId = 1
 
+### User IDs:
+### 1 = newtasker@example.com
+### 2 = odhi@gmail.com
+### 3 = timothykhalayi96@gmail.com
+### 4 = nandwatimothykhalayi@gmail.com
+
 ### Option A: paste tokens manually after login
 @accessToken =
 @refreshToken =
@@ -156,8 +162,13 @@ Content-Type: application/json
 ### Get all users
 GET {{baseUrl}}/users
 
-### Get user by ID
-GET {{baseUrl}}/users/{{userId}}
+### Then update the user IDs below based on the response above
+
+### User IDs (UPDATE THESE BASED ON DATABASE):
+### 1 = newtasker@example.com
+### 2 = odhi@gmail.com
+### 3 = timothykhalayi96@gmail.com
+### 4 = nandwatimothykhalayi@gmail.com
 
 ### Update user by ID
 PATCH {{baseUrl}}/users/{{userId}}
@@ -174,7 +185,7 @@ DELETE {{baseUrl}}/users/{{userId}}
 
 ### ==================== TASKS ====================
 
-### Create personified task
+### Create personified task - High Priority
 POST {{baseUrl}}/tasks
 Content-Type: application/json
 
@@ -185,11 +196,116 @@ Content-Type: application/json
   "status": "pending",
   "category": "work",
   "dueDate": "2026-04-10T10:00:00.000Z",
+  "userId": 1,
+  "isGlobal": false
+}
+
+### Create task for odhi (id: 2)
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+
+{
+  "title": "Design dashboard UI",
+  "description": "Create responsive design for admin dashboard",
+  "priority": "high",
+  "status": "pending",
+  "category": "design",
+  "dueDate": "2026-04-10T10:00:00.000Z",
+  "userId": 2,
+  "isGlobal": false
+}
+
+### Create task for timothykhalayi96 (id: 3)
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+
+{
+  "title": "API integration testing",
+  "description": "Test all new API endpoints",
+  "priority": "high",
+  "status": "pending",
+  "category": "testing",
+  "dueDate": "2026-04-10T10:00:00.000Z",
+  "userId": 3,
+  "isGlobal": false
+}
+
+### Create task for nandwatimothykhalayi (id: 4)
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+
+{
+  "title": "System monitoring setup",
+  "description": "Configure monitoring and alerting system",
+  "priority": "high",
+  "status": "pending",
+  "category": "operations",
+  "dueDate": "2026-04-10T10:00:00.000Z",
+  "userId": 4,
+  "isGlobal": false
+}
+
+### Create personified task - Medium Priority
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+
+{
+  "title": "Review code changes",
+  "description": "Review and approve pending pull requests",
+  "priority": "medium",
+  "status": "pending",
+  "category": "work",
+  "dueDate": "2026-04-09T14:00:00.000Z",
   "userId": {{userId}},
   "isGlobal": false
 }
 
-### Create global task
+### Create personified task - Low Priority
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+
+{
+  "title": "Update documentation",
+  "description": "Update API documentation with new endpoints",
+  "priority": "low",
+  "status": "pending",
+  "category": "documentation",
+  "dueDate": "2026-04-15T09:00:00.000Z",
+  "userId": {{userId}},
+  "isGlobal": false
+}
+
+### Create personified task - Personal
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+
+{
+  "title": "Schedule team meeting",
+  "description": "Book meeting room and send invites",
+  "priority": "medium",
+  "status": "pending",
+  "category": "meeting",
+  "dueDate": "2026-04-11T10:00:00.000Z",
+  "userId": {{userId}},
+  "isGlobal": false
+}
+
+### Create personified task - Bug Fix
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+
+{
+  "title": "Fix login bug",
+  "description": "User status validation is blocking inactive admins",
+  "priority": "high",
+  "status": "pending",
+  "category": "bug",
+  "dueDate": "2026-04-08T17:00:00.000Z",
+  "userId": {{userId}},
+  "isGlobal": false
+}
+
+### Create global task - Team Standup
 POST {{baseUrl}}/tasks
 Content-Type: application/json
 
@@ -198,8 +314,64 @@ Content-Type: application/json
   "description": "Daily team sync",
   "priority": "medium",
   "status": "pending",
-  "category": "work",
+  "category": "meeting",
   "dueDate": "2026-04-09T10:00:00.000Z",
+  "isGlobal": true
+}
+
+### Create global task - Security Check
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+
+{
+  "title": "Security patching",
+  "description": "Apply latest security patches to all systems",
+  "priority": "high",
+  "status": "pending",
+  "category": "security",
+  "dueDate": "2026-04-12T09:00:00.000Z",
+  "isGlobal": true
+}
+
+### Create global task - Maintenance
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+
+{
+  "title": "Database backup",
+  "description": "Schedule and run weekly database backup",
+  "priority": "high",
+  "status": "pending",
+  "category": "maintenance",
+  "dueDate": "2026-04-13T02:00:00.000Z",
+  "isGlobal": true
+}
+
+### Create global task - Team Training
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+
+{
+  "title": "Team training session",
+  "description": "New features training for all team members",
+  "priority": "medium",
+  "status": "pending",
+  "category": "training",
+  "dueDate": "2026-04-14T15:00:00.000Z",
+  "isGlobal": true
+}
+
+### Create global task - Deployment
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+
+{
+  "title": "Production deployment",
+  "description": "Deploy v2.0 to production environment",
+  "priority": "high",
+  "status": "pending",
+  "category": "deployment",
+  "dueDate": "2026-04-16T20:00:00.000Z",
   "isGlobal": true
 }
 
