@@ -16,6 +16,7 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { AuthService } from './auth.service';
+import { MailService } from '../mail/mail.service';
 import { LoginAuthDto } from './dto/login.dto';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
@@ -41,6 +42,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly usersService: UsersService,
+    private readonly mailService: MailService,
   ) {}
   // ===== REGISTER =====
   @Public()
@@ -211,5 +213,37 @@ export class AuthController {
       resetPasswordDto.otp,
       resetPasswordDto.newPassword,
     );
+  }
+
+  // ===== DIAGNOSTIC ENDPOINTS =====
+  @Public()
+  @Get('test-email')
+  @ApiOperation({ summary: 'Test email/SMTP connection (Diagnostic)' })
+  @ApiResponse({
+    status: 200,
+    description: 'Email system status',
+  })
+  async testEmailConnection() {
+    try {
+      const result = await this.mailService.testSmtpConnection();
+      return result;
+    } catch (error) {
+      return {
+        success: false,
+        message: 'Email system test failed',
+       // error: error.message,
+      };
+    }
+  }
+
+  @Public()
+  @Get('health')
+  @ApiOperation({ summary: 'Health check endpoint' })
+  async health() {
+    return {
+      status: 'ok',
+      timestamp: new Date().toISOString(),
+      environment: process.env.NODE_ENV || 'development',
+    };
   }
 }

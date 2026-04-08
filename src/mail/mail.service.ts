@@ -44,6 +44,9 @@ export class MailService {
    */
   async sendPasswordResetEmail(user: User, otp: string): Promise<void> {
     try {
+      this.logger.debug(
+        `Attempting to send password reset email to ${user.email}`,
+      );
       await this.mailerService.sendMail({
         to: user.email,
         subject: 'Password Reset Request - Taska',
@@ -61,8 +64,11 @@ export class MailService {
     } catch (error) {
       this.logger.error(
         `Failed to send password reset email to ${user.email}: ${error.message}`,
+        error.stack,
       );
-      throw new Error('Failed to send password reset email');
+      throw new Error(
+        `Failed to send password reset email: ${error.message}`,
+      );
     }
   }
 
@@ -267,6 +273,40 @@ export class MailService {
         `Failed to send custom mail to ${options.to}: ${error.message}`,
       );
       throw error;
+    }
+  }
+
+  /**
+   * Diagnostic method to verify SMTP configuration and connectivity
+   */
+  async testSmtpConnection(): Promise<{
+    success: boolean;
+    message: string;
+    error?: string;
+  }> {
+    try {
+      this.logger.log('Testing SMTP connection...');
+
+      // Test with a simple verification email
+      const testResult = await this.mailerService.sendMail({
+        to: process.env.MAIL_USER || 'test@example.com',
+        subject: 'SMTP Connection Test - Taska',
+        text: 'If you receive this email, the SMTP connection is working correctly.',
+        html: '<p>If you receive this email, the SMTP connection is working correctly.</p>',
+      });
+
+      this.logger.log('SMTP connection test successful');
+      return {
+        success: true,
+        message: 'SMTP connection is working correctly',
+      };
+    } catch (error) {
+      this.logger.error(`SMTP connection test failed: ${error.message}`, error.stack);
+      return {
+        success: false,
+        message: 'SMTP connection test failed',
+        error: error.message,
+      };
     }
   }
 }
