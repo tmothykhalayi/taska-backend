@@ -16,35 +16,38 @@ export enum TaskStatus {
 @Entity()
 export class Task {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column()
-  title: string;
+  title!: string;
 
   @Column({ type: 'text', nullable: true })
-  description: string | null;
+  description: string | null = null;
 
   @Column({ type: 'enum', enum: TaskPriority, default: TaskPriority.MEDIUM })
-  priority: TaskPriority;
+  priority!: TaskPriority;
 
   @Column({ type: 'enum', enum: TaskStatus, default: TaskStatus.PENDING })
-  status: TaskStatus;
+  status!: TaskStatus;
 
   @Column({ type: 'text', nullable: true })
-  category: string | null;
+  category: string | null = null;
 
   @Column({ type: 'timestamptz', nullable: true })
-  dueDate: Date | null;
+  dueDate: Date | null = null;
 
   @Column({ default: false })
-  completed: boolean;
+  completed!: boolean;
 
-  @ManyToOne(() => User, user => user.tasks, { onDelete: 'CASCADE' })
-  user: User;
+  @Column({ default: false })
+  isGlobal!: boolean;
+
+  @ManyToOne(() => User, user => user.tasks, { onDelete: 'CASCADE', nullable: true })
+  user: User | null = null;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

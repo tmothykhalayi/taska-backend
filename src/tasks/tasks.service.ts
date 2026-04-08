@@ -5,6 +5,7 @@ import { Task, TaskStatus } from './entities/task.entity';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { UsersService } from '../users/users.service';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class TasksService {
@@ -15,7 +16,15 @@ export class TasksService {
   ) {}
 
   async create(createTaskDto: CreateTaskDto): Promise<Task> {
-    const user = await this.usersService.findOne(createTaskDto.userId);
+    // If isGlobal is true, don't require userId. Otherwise, userId is required
+    let user: User | null = null;
+    
+    if (!createTaskDto.isGlobal && createTaskDto.userId) {
+      user = await this.usersService.findOne(createTaskDto.userId);
+    } else if (!createTaskDto.isGlobal && !createTaskDto.userId) {
+      throw new Error('userId is required for non-global tasks');
+    }
+
     const status = createTaskDto.status || TaskStatus.PENDING;
     const task = this.taskRepository.create({
       title: createTaskDto.title,
@@ -25,6 +34,7 @@ export class TasksService {
       category: createTaskDto.category ?? null,
       status,
       completed: status === TaskStatus.COMPLETED,
+      isGlobal: createTaskDto.isGlobal ?? false,
       user,
     });
     return this.taskRepository.save(task);
@@ -57,6 +67,7 @@ export class TasksService {
         ? new Date(updateTaskDto.dueDate)
         : null;
     }
+    if (updateTaskDto.isGlobal !== undefined) task.isGlobal = updateTaskDto.isGlobal;
 
     if (updateTaskDto.status !== undefined) {
       task.status = updateTaskDto.status;
@@ -69,5 +80,34 @@ export class TasksService {
   async remove(id: number): Promise<void> {
     const task = await this.findOne(id);
     await this.taskRepository.remove(task);
+  }
+
+  // Get all global tasks (for everyone)
+  async findAllGlobal(): Promise<Task[]> {
+    return this.taskRepository.find({
+      where: { isGlobal: true },
+      relations: ['user'],
+    });
+  }
+
+  // Get tasks for a specific user including global tasks
+  async findByUserId(userId: number): Promise<Task[]> {
+    return this.taskRepository.find({
+      where: [
+        { user: { id: userId } }, // Tasks assigned to the user
+        { isGlobal: true }, // Global tasks for everyone
+      ],
+      relations: ['user'],
+      order: { createdAt: 'DESC' },
+    });
+  }
+
+  // Get only personified tasks for a specific user (excluding global)
+  async findPersonalByUserId(userId: number): Promise<Task[]> {
+    return this.taskRepository.find({
+      where: { user: { id: userId }, isGlobal: false },
+      relations: ['user'],
+      order: { createdAt: 'DESC' },
+    });
   }
 }

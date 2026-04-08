@@ -5,13 +5,14 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  IsBoolean,
 } from 'class-validator';
 import { TaskPriority, TaskStatus } from '../entities/task.entity';
 
 export class CreateTaskDto {
   @IsNotEmpty()
   @IsString()
-  title: string;
+  title!: string;
 
   @IsOptional()
   @IsString()
@@ -33,6 +34,11 @@ export class CreateTaskDto {
   @IsDateString()
   dueDate?: string;
 
+  @IsOptional()
   @IsNumber()
-  userId: number; // The ID of the user who owns this task
+  userId?: number; // The ID of the user who owns this task (optional for global tasks)
+
+  @IsOptional()
+  @IsBoolean()
+  isGlobal?: boolean; // If true, task is for everyone; if false, task is assigned to specific user
 }
