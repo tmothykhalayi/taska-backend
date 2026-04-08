@@ -15,6 +15,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
           type: 'postgres' as const,
           entities: [__dirname + '/../**/*.entity{.ts,.js}'],
           synchronize: false,
+          dropSchema: true,
           ssl: useSsl ? { rejectUnauthorized: false } : false,
           extra: useSsl ? { ssl: { rejectUnauthorized: false } } : {},
           retryAttempts: 5,
