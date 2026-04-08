@@ -5,6 +5,28 @@ import { User } from '../users/entities/user.entity';
 @Injectable()
 export class MailService {
   private readonly logger = new Logger(MailService.name);
+  private smtpCooldownUntil = 0;
+  private readonly inFlightPasswordResetEmails = new Set<string>();
+  private readonly inFlightWelcomeEmails = new Set<string>();
+
+  private getSmtpCooldownMs(): number {
+    return Number(process.env.MAIL_COOLDOWN_MS || 300000);
+  }
+
+  private isTransientSmtpError(error: any): boolean {
+    const message = String(error?.message || '').toLowerCase();
+    const code = String(error?.code || '').toUpperCase();
+
+    return (
+      message.includes('connection timeout') ||
+      message.includes('enetunreach') ||
+      message.includes('ehostunreach') ||
+      message.includes('etimedout') ||
+      code === 'ENETUNREACH' ||
+      code === 'EHOSTUNREACH' ||
+      code === 'ETIMEDOUT'
+    );
+  }
 
   constructor(private readonly mailerService: MailerService) {}
 
@@ -32,7 +54,7 @@ export class MailService {
       });
 
       this.logger.log(`Login notification sent to ${user.email}`);
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error(
         `Failed to send login notification to ${user.email}: ${error.message}`,
       );
@@ -43,6 +65,23 @@ export class MailService {
    * Send password reset OTP email
    */
   async sendPasswordResetEmail(user: User, otp: string): Promise<void> {
+    if (Date.now() < this.smtpCooldownUntil) {
+      const resumeAt = new Date(this.smtpCooldownUntil).toISOString();
+      this.logger.warn(
+        `Skipping password reset email for ${user.email}; SMTP cooldown active until ${resumeAt}`,
+      );
+      return;
+    }
+
+    if (this.inFlightPasswordResetEmails.has(user.email)) {
+      this.logger.warn(
+        `Skipping password reset email for ${user.email}; a previous send is still in progress`,
+      );
+      return;
+    }
+
+    this.inFlightPasswordResetEmails.add(user.email);
+
     try {
       this.logger.debug(
         `Attempting to send password reset email to ${user.email}`,
@@ -61,7 +100,16 @@ export class MailService {
       });
 
       this.logger.log(`Password reset email sent to ${user.email}`);
-    } catch (error) {
+    } catch (error: any) {
+      if (this.isTransientSmtpError(error)) {
+        this.smtpCooldownUntil = Date.now() + this.getSmtpCooldownMs();
+        const resumeAt = new Date(this.smtpCooldownUntil).toISOString();
+        this.logger.warn(
+          `Transient SMTP failure while sending password reset email to ${user.email}. Cooling down until ${resumeAt}. Error: ${error.message}`,
+        );
+        return;
+      }
+
       this.logger.error(
         `Failed to send password reset email to ${user.email}: ${error.message}`,
         error.stack,
@@ -69,6 +117,8 @@ export class MailService {
       throw new Error(
         `Failed to send password reset email: ${error.message}`,
       );
+    } finally {
+      this.inFlightPasswordResetEmails.delete(user.email);
     }
   }
 
@@ -90,7 +140,7 @@ export class MailService {
       });
 
       this.logger.log(`Password reset success email sent to ${user.email}`);
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error(
         `Failed to send password reset success email to ${user.email}: ${error.message}`,
       );
@@ -102,6 +152,23 @@ export class MailService {
    * Send welcome email for new users
    */
   async sendWelcomeEmail(user: User): Promise<void> {
+    if (Date.now() < this.smtpCooldownUntil) {
+      const resumeAt = new Date(this.smtpCooldownUntil).toISOString();
+      this.logger.warn(
+        `Skipping welcome email for ${user.email}; SMTP cooldown active until ${resumeAt}`,
+      );
+      return;
+    }
+
+    if (this.inFlightWelcomeEmails.has(user.email)) {
+      this.logger.warn(
+        `Skipping welcome email for ${user.email}; a previous send is still in progress`,
+      );
+      return;
+    }
+
+    this.inFlightWelcomeEmails.add(user.email);
+
     try {
       await this.mailerService.sendMail({
         to: user.email,
@@ -116,11 +183,22 @@ export class MailService {
       });
 
       this.logger.log(`Welcome email sent to ${user.email}`);
-    } catch (error) {
+    } catch (error: any) {
+      if (this.isTransientSmtpError(error)) {
+        this.smtpCooldownUntil = Date.now() + this.getSmtpCooldownMs();
+        const resumeAt = new Date(this.smtpCooldownUntil).toISOString();
+        this.logger.warn(
+          `Transient SMTP failure while sending welcome email to ${user.email}. Cooling down until ${resumeAt}. Error: ${error.message}`,
+        );
+        return;
+      }
+
       this.logger.error(
         `Failed to send welcome email to ${user.email}: ${error.message}`,
       );
       // Don't throw error to avoid breaking registration flow
+    } finally {
+      this.inFlightWelcomeEmails.delete(user.email);
     }
   }
 
@@ -148,7 +226,7 @@ export class MailService {
       });
 
       this.logger.log(`Security alert sent to ${user.email}`);
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error(
         `Failed to send security alert to ${user.email}: ${error.message}`,
       );
@@ -180,7 +258,7 @@ export class MailService {
       });
 
       this.logger.log(`Task reminder sent to ${taskData.userEmail}`);
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error(
         `Failed to send task reminder to ${taskData.userEmail}: ${error.message}`,
       );
@@ -217,7 +295,7 @@ export class MailService {
       });
 
       this.logger.log(`Task assigned email sent to ${taskData.assigneeEmail}`);
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error(
         `Failed to send task assigned email to ${taskData.assigneeEmail}: ${error.message}`,
       );
@@ -248,7 +326,7 @@ export class MailService {
       });
 
       this.logger.log(`Task completion email sent to ${taskData.userEmail}`);
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error(
         `Failed to send task completion email to ${taskData.userEmail}: ${error.message}`,
       );
@@ -268,7 +346,7 @@ export class MailService {
     try {
       await this.mailerService.sendMail(options);
       this.logger.log(`Custom mail sent to ${options.to}`);
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error(
         `Failed to send custom mail to ${options.to}: ${error.message}`,
       );
@@ -300,7 +378,7 @@ export class MailService {
         success: true,
         message: 'SMTP connection is working correctly',
       };
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error(`SMTP connection test failed: ${error.message}`, error.stack);
       return {
         success: false,

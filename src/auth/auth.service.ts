@@ -67,15 +67,8 @@ export class AuthService {
 
     this.logger.log(`User registered successfully: ${user.email}`);
 
-    // 3. Send welcome email (non-blocking)
-    try {
-      await this.mailService.sendWelcomeEmail(user);
-    } catch (emailError: any) {
-      this.logger.warn(
-        `Failed to send welcome email to ${user.email}: ${emailError.message}`,
-      );
-      // Don't throw - registration should succeed even if email fails
-    }
+    // 3. Send welcome email asynchronously so SMTP delays do not block registration.
+    void this.mailService.sendWelcomeEmail(user);
 
     // 4. Return only user info (tokens are provided on login)
     return {
@@ -358,7 +351,9 @@ export class AuthService {
         this.logger.warn(
           `Password reset requested for non-existent email: ${email}`,
         );
-        throw new NotFoundException('User not found');
+        return {
+          message: 'If an account exists, a password reset email will be sent shortly.',
+        };
       }
 
       const { otp, secret } = this.generateOtp();
@@ -373,9 +368,6 @@ export class AuthService {
       // Send password reset email asynchronously so SMTP delays do not block the API response.
       void this.mailService
         .sendPasswordResetEmail(user, otp)
-        .then(() => {
-          this.logger.log(`Password reset email sent to ${email}`);
-        })
         .catch((mailError: any) => {
           this.logger.error(
             `Password reset OTP created but email delivery failed for ${email}: ${mailError.message}`,

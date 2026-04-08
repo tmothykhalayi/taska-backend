@@ -4,6 +4,7 @@ import {
   Post,
   Req,
   UnauthorizedException,
+  ConflictException,
   UseGuards,
   Param,
   ParseIntPipe,
@@ -55,7 +56,7 @@ export class AuthController {
         createAuthDto.email,
       );
       if (existingUser) {
-        throw new UnauthorizedException('User already exists');
+        throw new ConflictException('User already exists');
       }
     } catch (error) {
       // If findByEmail throws NotFoundException, user doesn't exist (which is what we want)
