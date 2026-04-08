@@ -7,3 +7,4 @@
 4/8/26, 4:32 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"Expected property name or '}' in JSON at position 237 (line 8 column 14)","error":"Bad Request","statusCode":400} - Path: /tasks
 4/8/26, 7:35 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"User already exists","error":"Unauthorized","statusCode":401} - Path: /auth/register
 4/8/26, 8:16 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"User with this email already exists","error":"Conflict","statusCode":409} - Path: /auth/register
+4/8/26, 8:27 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"User not found","error":"Not Found","statusCode":404} - Path: /auth/forgot-password

@@ -3,93 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Security Alert</title>
+    <title>Taska - Security Alert</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
             max-width: 600px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f4f4f4;
+            background-color: #f5f5f5;
         }
         .container {
             background-color: white;
             padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
         }
         .header {
             text-align: center;
-            border-bottom: 2px solid #dc3545;
+            border-bottom: 3px solid #dc2626;
             padding-bottom: 20px;
             margin-bottom: 30px;
         }
         .logo {
-            color: #dc3545;
-            font-size: 24px;
+            color: #dc2626;
+            font-size: 28px;
             font-weight: bold;
             margin-bottom: 10px;
         }
         .alert-box {
-            background-color: #f8d7da;
-            border: 2px solid #f5c6cb;
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border: 2px solid #fca5a5;
             border-radius: 10px;
-            padding: 20px;
+            padding: 25px;
             margin: 20px 0;
             text-align: center;
         }
+        .alert-box h3 {
+            margin-top: 0;
+            color: #991b1b;
+            font-size: 22px;
+        }
         .info-box {
-            background-color: #f8f9fa;
-            border: 1px solid #dee2e6;
+            background-color: #fef2f2;
+            border-left: 4px solid #dc2626;
             border-radius: 5px;
             padding: 15px;
             margin: 20px 0;
+        }
+        .info-box h3 {
+            margin-top: 0;
+            color: #dc2626;
+        }
+        .info-box ul, .info-box ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .info-box li {
+            margin: 8px 0;
         }
         .footer {
             text-align: center;
             margin-top: 30px;
             padding-top: 20px;
-            border-top: 1px solid #dee2e6;
-            color: #6c757d;
-            font-size: 14px;
+            border-top: 1px solid #e5e7eb;
+            color: #6b7280;
+            font-size: 13px;
         }
         .btn {
             display: inline-block;
-            padding: 12px 24px;
-            background-color: #dc3545;
+            padding: 12px 30px;
+            background-color: #dc2626;
             color: white;
             text-decoration: none;
-            border-radius: 5px;
-            margin: 10px 0;
+            border-radius: 6px;
+            margin: 15px 0;
             font-weight: bold;
+            font-size: 16px;
         }
         .btn:hover {
-            background-color: #c82333;
+            background-color: #b91c1c;
         }
         .urgent {
-            color: #dc3545;
-            font-weight: bold;
+            color: #991b1b;
+            font-weight: 700;
+        }
+        .action-box {
+            background-color: #fef3c7;
+            border-left: 4px solid #d97706;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .action-box ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .action-box li {
+            margin: 10px 0;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">🧠 CuraMind Technologies</div>
-            <h2>Security Alert</h2>
+            <div class="logo">🚨 Taska - Security Alert</div>
         </div>
 
         <p>Hello <strong>{{firstName}} {{lastName}}</strong>,</p>
 
         <div class="alert-box">
-            <h3 class="urgent">🚨 Security Alert: {{alertType}}</h3>
-            <p>We detected suspicious activity on your CuraMind Technologies account.</p>
+            <h3>⏰ Security Alert: {{alertType}}</h3>
+            <p>We detected unusual or suspicious activity on your Taska account.</p>
         </div>
 
         <div class="info-box">
-            <h3>Alert Details:</h3>
+            <h3>📋 Alert Details:</h3>
             <ul>
                 <li><strong>Alert Type:</strong> {{alertType}}</li>
                 <li><strong>Email:</strong> {{email}}</li>
@@ -98,45 +128,51 @@
             </ul>
         </div>
 
-        <p class="urgent">This requires your immediate attention!</p>
+        <p style="text-align: center;" class="urgent">⚠️ This requires your immediate attention!</p>
 
-        <div class="info-box">
-            <h3>🚨 Immediate Actions Required:</h3>
+        <div class="action-box">
+            <strong style="color: #92400e;">Take Action Now:</strong>
             <ol>
-                <li><strong>Change your password immediately</strong></li>
-                <li><strong>Enable two-factor authentication</strong></li>
-                <li><strong>Review recent account activity</strong></li>
-                <li><strong>Contact support if you don't recognize this activity</strong></li>
+                <li><strong>Change your password immediately</strong> with a new, strong password</li>
+                <li><strong>Enable two-factor authentication</strong> if not already enabled</li>
+                <li><strong>Review your recent account activity</strong> for any unauthorized changes</li>
+                <li><strong>Contact our security team</strong> if you don't recognize this activity</li>
+                <li><strong>Check your connected devices</strong> and log out from unknown devices</li>
             </ol>
         </div>
 
         <div style="text-align: center;">
-            <a href="#" class="btn">Secure My Account Now</a>
+            <a href="https://taska-rho.vercel.app/security" class="btn">Secure My Account Now</a>
         </div>
 
         <div class="info-box">
-            <h3>🔒 Additional Security Measures:</h3>
+            <h3>🔐 Additional Security Measures:</h3>
             <ul>
-                <li>✅ Use a strong, unique password</li>
+                <li>✅ Use a strong, 12+ character password</li>
                 <li>✅ Enable two-factor authentication</li>
                 <li>✅ Monitor your account regularly</li>
-                <li>✅ Log out from all devices</li>
-                <li>✅ Report any suspicious activity</li>
+                <li>✅ Review connected apps and devices</li>
+                <li>✅ Report any suspicious activity immediately</li>
+                <li>✅ Update your recovery email and phone</li>
             </ul>
         </div>
 
-        <p><strong>If you didn't perform this action:</strong></p>
-        <ul>
-            <li>Contact our security team immediately</li>
-            <li>Change your password on all accounts</li>
-            <li>Monitor your financial accounts</li>
-            <li>Consider freezing your credit</li>
-        </ul>
+        <div style="background-color: #fee2e2; border-radius: 5px; padding: 15px; margin: 20px 0; border-left: 4px solid #dc2626;">
+            <p class="urgent" style="margin-top: 0;">⚠️ Didn't perform this action?</p>
+            <ul style="margin: 10px 0; padding-left: 20px;">
+                <li>Contact our security team <strong>immediately</strong></li>
+                <li>Change your password right away</li>
+                <li>Monitor your financial accounts</li>
+                <li>Check for any unauthorized changes to your tasks or profile</li>
+                <li>Consider reviewing your connected integrations</li>
+            </ul>
+        </div>
 
         <div class="footer">
-            <p class="urgent">This is an automated security alert from CuraMind Technologies.</p>
-            <p>If you have any questions, please contact our security team immediately.</p>
-            <p>&copy; 2026 CuraMind Technologies. All rights reserved.</p>
+            <p class="urgent">This is an automated security alert from Taska.</p>
+            <p>For security concerns, contact our team immediately: support@taska.app</p>
+            <p>&copy; 2026 Taska. All rights reserved.</p>
+            <p>🚀 Smart Task Management - Protecting Your Data</p>
         </div>
     </div>
 </body>

@@ -3,127 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to CuraMind Technologies</title>
+    <title>Welcome to Taska - Task Management</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
             max-width: 600px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f4f4f4;
+            background-color: #f5f5f5;
         }
         .container {
             background-color: white;
             padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
         }
         .header {
             text-align: center;
-            border-bottom: 2px solid #007bff;
+            border-bottom: 3px solid #4f46e5;
             padding-bottom: 20px;
             margin-bottom: 30px;
         }
         .logo {
-            color: #007bff;
-            font-size: 24px;
+            color: #4f46e5;
+            font-size: 28px;
             font-weight: bold;
             margin-bottom: 10px;
         }
+        .logo-subtitle {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
         .welcome-box {
-            background-color: #e3f2fd;
-            border: 2px solid #bbdefb;
+            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+            color: white;
             border-radius: 10px;
-            padding: 20px;
+            padding: 25px;
             margin: 20px 0;
             text-align: center;
         }
+        .welcome-box h3 {
+            margin: 0 0 10px 0;
+            font-size: 22px;
+        }
         .feature-box {
-            background-color: #f8f9fa;
-            border: 1px solid #dee2e6;
+            background-color: #f8f9ff;
+            border-left: 4px solid #4f46e5;
             border-radius: 5px;
             padding: 15px;
             margin: 20px 0;
+        }
+        .feature-box h4 {
+            margin: 0 0 10px 0;
+            color: #4f46e5;
+        }
+        .feature-box ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .feature-box li {
+            margin: 8px 0;
+            color: #555;
         }
         .footer {
             text-align: center;
             margin-top: 30px;
             padding-top: 20px;
-            border-top: 1px solid #dee2e6;
-            color: #6c757d;
-            font-size: 14px;
+            border-top: 1px solid #e5e7eb;
+            color: #6b7280;
+            font-size: 13px;
         }
         .btn {
             display: inline-block;
-            padding: 12px 24px;
-            background-color: #007bff;
+            padding: 12px 30px;
+            background-color: #4f46e5;
             color: white;
             text-decoration: none;
-            border-radius: 5px;
-            margin: 10px 0;
+            border-radius: 6px;
+            margin: 15px 0;
             font-weight: bold;
+            font-size: 16px;
         }
         .btn:hover {
-            background-color: #0056b3;
+            background-color: #4338ca;
+        }
+        .role-badge {
+            display: inline-block;
+            background-color: #e0e7ff;
+            color: #4f46e5;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin: 10px 0;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">🧠 CuraMind Technologies</div>
-            <h2>Welcome to CuraMind!</h2>
+            <div class="logo">✓ Taska</div>
+            <div class="logo-subtitle">Smart Task Management Platform</div>
         </div>
 
         <p>Hello <strong>{{firstName}} {{lastName}}</strong>,</p>
 
         <div class="welcome-box">
-            <h3>🎉 Welcome to the Future of Mental Healthcare!</h3>
-            <p>We're excited to have you join our mental health community.</p>
+            <h3>🎉 Welcome to Taska!</h3>
+            <p>Your account is ready. Let's start organizing your tasks and boosting your productivity!</p>
         </div>
 
-        <p>Your account has been successfully created with the role: <strong>{{role}}</strong></p>
+        <p>Your account has been successfully created as a <span class="role-badge">{{role}}</span></p>
 
         <div class="feature-box">
-            <h3>🚀 What you can do with CuraMind:</h3>
+            <h4>🚀 What You Can Do With Taska:</h4>
             <ul>
-                <li>📅 Schedule and manage appointments</li>
-                <li>💊 Access your medical records</li>
-                <li>👨‍⚕️ Connect with healthcare providers</li>
-                <li>💳 Manage payments securely</li>
-                <li>📱 Access your account from anywhere</li>
-                <li>🔒 Secure and private healthcare data</li>
+                <li>📋 Create and organize tasks with priorities</li>
+                <li>📅 Set due dates and track deadlines</li>
+                <li>✓ Mark tasks complete and build streaks</li>
+                <li>🏆 Earn badges for consistency</li>
+                <li>👥 Collaborate with team members</li>
+                <li>📊 View task analytics and progress</li>
+                <li>🔔 Get smart reminders for upcoming tasks</li>
+                <li>💾 Access your tasks from any device</li>
             </ul>
         </div>
 
         <div style="text-align: center;">
-            <a href="#" class="btn">Get Started</a>
+            <a href="https://taska-rho.vercel.app/" class="btn">Launch Taska</a>
         </div>
 
         <div class="feature-box">
-            <h3>🔐 Security First:</h3>
+            <h4>🎯 Getting Started:</h4>
+            <ol style="margin: 0; padding-left: 20px;">
+                <li>Complete your profile</li>
+                <li>Create your first task</li>
+                <li>Set your task preferences</li>
+                <li>Start building productive habits</li>
+            </ol>
+        </div>
+
+        <div class="feature-box">
+            <h4>✨ Pro Tips:</h4>
             <ul>
-                <li>✅ Your data is encrypted and secure</li>
-                <li>✅ HIPAA compliant platform</li>
-                <li>✅ Two-factor authentication available</li>
-                <li>✅ Regular security updates</li>
+                <li>🔥 Build streaks by completing tasks daily</li>
+                <li>📍 Use categories to organize by project</li>
+                <li>⏰ Set reminders for important tasks</li>
+                <li>🤝 Invite team members to collaborate</li>
             </ul>
         </div>
 
-        <p><strong>Next Steps:</strong></p>
-        <ol>
-            <li>Complete your profile information</li>
-            <li>Set up your preferences</li>
-            <li>Explore the platform features</li>
-            <li>Connect with healthcare providers</li>
-        </ol>
+        <p style="text-align: center; margin-top: 25px;">
+            <strong>Questions?</strong> Our support team is here to help!
+        </p>
 
         <div class="footer">
-            <p>Thank you for choosing CuraMind Technologies!</p>
-            <p>If you have any questions, our support team is here to help.</p>
-            <p>&copy; 2026 CuraMind Technologies. All rights reserved.</p>
+            <p>Thank you for choosing Taska - where productivity meets simplicity!</p>
+            <p>&copy; 2026 Taska. All rights reserved.</p>
+            <p>🚀 Made to help you accomplish more</p>
         </div>
     </div>
 </body>
