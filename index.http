@@ -9,6 +9,8 @@
 @streakId = 1
 @badgeId = 1
 @quoteId = 1
+@globalTaskId = 2
+@personalTaskId = 1
 
 ### Option A: paste tokens manually after login
 @accessToken =
@@ -51,12 +53,13 @@ POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
-  "email": "nandwatimothykhalayi@.com",
+  "email": "nandwatimothykhalayi1@gmail.com",
   "password": "AdminPass123!",
   "firstName": "Admin",
   "lastName": "User",
   "phoneNumber": "+254711111111",
-  "role": "admin"
+  "role": "admin",
+  "status": "active"
 }
 
 ### Login
@@ -274,3 +277,12 @@ Content-Type: application/json
     "loginAttemptLimit": 5
   }
 }
+
+
+### ==================== LOGS ====================
+
+### Get all logs
+GET {{baseUrl}}/logs
+
+### Get logs by user ID
+GET {{baseUrl}}/logs/user/{{userId}}

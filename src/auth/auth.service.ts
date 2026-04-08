@@ -114,12 +114,12 @@ export class AuthService {
       }
 
       // Check if user status is active
-      if (user.status !== 'active') {
-        this.logger.warn(
-          `Login failed - user account is inactive: ${loginAuthDto.email}`,
-        );
-        throw new UnauthorizedException('Your account is inactive. Please contact an administrator.');
-      }
+      // if (user.status !== 'active') {
+      //   this.logger.warn(
+      //     `Login failed - user account is inactive: ${loginAuthDto.email}`,
+      //   );
+      //   throw new UnauthorizedException('Your account is inactive. Please contact an administrator.');
+      // }
 
       // Compare against 'user.password' which contains the hashed password
       const isPasswordValid = await bcrypt.compare(
