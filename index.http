@@ -108,6 +108,8 @@ Content-Type: application/json
   "role": "admin"
 }
 
+
+
 ### Login
 # @name login
 POST {{baseUrl}}/auth/login
