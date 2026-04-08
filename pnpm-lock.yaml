@@ -50,6 +50,9 @@ importers:
       class-validator:
         specifier: ^0.15.1
         version: 0.15.1
+      ejs:
+        specifier: ^5.0.1
+        version: 5.0.1
       handlebars:
         specifier: ^4.7.9
         version: 4.7.9
@@ -7198,8 +7201,7 @@ snapshots:
 
   ee-first@1.1.1: {}
 
-  ejs@5.0.1:
-    optional: true
+  ejs@5.0.1: {}
 
   electron-to-chromium@1.5.331: {}
 

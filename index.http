@@ -820,7 +820,7 @@ POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
-  "email": "welcometest93@example.com",
+  "email": "welcometest15@example.com",
   "password": "TestPass123!",
   "firstName": "Email",
   "lastName": "Tester",
