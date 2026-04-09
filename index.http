@@ -850,7 +850,7 @@ Content-Type: application/json
 
 {
   "email": "welcometest9@example.com",
-  "otp": "872402",
+  "otp": "062150",
   "newPassword": "NewPassword456!"
 }
 

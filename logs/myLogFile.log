@@ -13,3 +13,4 @@
 4/8/26, 11:32 PM - IP: ::ffff:127.0.0.1 - ERROR: Failed to send password reset email: connect ENETUNREACH 2a00:1450:4001:c21::6c:587 - Path: /auth/forgot-password
 4/9/26, 12:18 AM - IP: ::ffff:127.0.0.1 - ERROR: Failed to send password reset email: connect ENETUNREACH 2a00:1450:4001:c21::6d:587 - Path: /auth/forgot-password
 4/9/26, 12:19 AM - IP: ::ffff:127.0.0.1 - ERROR: Failed to send password reset email: connect ENETUNREACH 2a00:1450:4001:c21::6d:587 - Path: /auth/forgot-password
+4/9/26, 9:46 PM - IP: ::ffff:127.0.0.1 - ERROR: {"message":"No password reset request found","error":"Bad Request","statusCode":400} - Path: /auth/reset-password
