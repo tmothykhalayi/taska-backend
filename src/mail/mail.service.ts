@@ -83,9 +83,6 @@ export class MailService {
     this.inFlightPasswordResetEmails.add(user.email);
 
     try {
-      this.logger.debug(
-        `Attempting to send password reset email to ${user.email}`,
-      );
       await this.mailerService.sendMail({
         to: user.email,
         subject: 'Password Reset Request - Taska',
