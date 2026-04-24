@@ -123,24 +123,27 @@ export class TasksService {
     await this.taskRepository.remove(task);
   }
 
-  // Get all global tasks (for everyone)
+  // Get all global tasks excluding completed ones (for new/active users)
   async findAllGlobal(): Promise<Task[]> {
-    return this.taskRepository.find({
-      where: { isGlobal: true },
-      relations: ['user'],
-    });
+    return this.taskRepository
+      .createQueryBuilder('task')
+      .where('task.isGlobal = :isGlobal', { isGlobal: true })
+      .andWhere('task.status != :completedStatus', { completedStatus: TaskStatus.COMPLETED })
+      .leftJoinAndSelect('task.user', 'user')
+      .getMany();
   }
 
-  // Get tasks for a specific user including global tasks
+  // Get tasks for a specific user including global tasks (excluding completed global tasks)
   async findByUserId(userId: number): Promise<Task[]> {
-    return this.taskRepository.find({
-      where: [
-        { user: { id: userId } }, // Tasks assigned to the user
-        { isGlobal: true }, // Global tasks for everyone
-      ],
-      relations: ['user'],
-      order: { createdAt: 'DESC' },
-    });
+    return this.taskRepository
+      .createQueryBuilder('task')
+      .where('task.user.id = :userId', { userId })
+      .orWhere('(task.isGlobal = true AND task.status != :completedStatus)', { 
+        completedStatus: TaskStatus.COMPLETED 
+      })
+      .leftJoinAndSelect('task.user', 'user')
+      .orderBy('task.createdAt', 'DESC')
+      .getMany();
   }
 
   // Get only personified tasks for a specific user (excluding global)

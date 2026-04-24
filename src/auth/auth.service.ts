@@ -52,8 +52,8 @@ export class AuthService {
 
     // 2. Create user with role-specific profile using UsersService
     const hashedPassword = await bcrypt.hash(createAuthDto.password, 10);
-    // Admins are active by default, taskers are inactive
-    const userStatus = createAuthDto.role === 'admin' ? 'active' : 'inactive';
+    // All users are active by default
+    const userStatus = 'active';
     const user = await this.usersService.createUserWithRole({
       email: createAuthDto.email,
       firstName: createAuthDto.firstName,
