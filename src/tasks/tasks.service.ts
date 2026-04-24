@@ -133,17 +133,13 @@ export class TasksService {
       .getMany();
   }
 
-  // Get tasks for a specific user including global tasks (excluding completed global tasks)
+  // Get tasks for a specific user (only personally assigned tasks, no global tasks)
   async findByUserId(userId: number): Promise<Task[]> {
-    return this.taskRepository
-      .createQueryBuilder('task')
-      .where('task.user.id = :userId', { userId })
-      .orWhere('(task.isGlobal = true AND task.status != :completedStatus)', { 
-        completedStatus: TaskStatus.COMPLETED 
-      })
-      .leftJoinAndSelect('task.user', 'user')
-      .orderBy('task.createdAt', 'DESC')
-      .getMany();
+    return this.taskRepository.find({
+      where: { user: { id: userId }, isGlobal: false },
+      relations: ['user'],
+      order: { createdAt: 'DESC' },
+    });
   }
 
   // Get only personified tasks for a specific user (excluding global)
