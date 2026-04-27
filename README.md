@@ -4,7 +4,6 @@
 A scalable, modular RESTful API built with **NestJS**, **TypeScript**, and **PostgreSQL**. Provides comprehensive backend services for task management, user authentication, streak tracking, badges, and motivational features.
 
 ## 📋 Table of Contents
-
 - [Overview](#overview)
 - [Tech Stack](#tech-stack)
 - [Prerequisites](#prerequisites)
